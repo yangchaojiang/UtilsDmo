@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">YUtils</string>
+    <string name="wb_input_verification_code">请输入验证码</string>
+    <string name="wb_get_verification_code">获取验证码</string>
+    <string name="unknown">未知</string>
+    <string name="branch">分</string>
+    <string name="second">秒</string>
+</resources>
