@@ -1,7 +1,6 @@
 # UtilsDmo
-
- 引用 
-##依赖
+ 
+ ##依赖
 `compile 'com.ycjiang:yutils:1.0.0'`
  
  
