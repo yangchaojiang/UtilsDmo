@@ -8,6 +8,7 @@ import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -19,6 +20,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,7 +29,12 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import java.io.File;
+import java.text.DecimalFormat;
 import java.util.List;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by yangjiang on 2017/1/6.
@@ -39,9 +46,11 @@ public class YUtils {
     private static boolean DEBUG = false;
     private static Context mApplicationContent;
     private static Toast mToast = null;
+    private static int gravity = Gravity.BOTTOM;
 
     public static void initialize(Application app) {
         mApplicationContent = app.getApplicationContext();
+
     }
 
     /****
@@ -53,6 +62,15 @@ public class YUtils {
     public static void setDebug(boolean isDebug, String TAG) {
         YUtils.TAG = TAG;
         YUtils.DEBUG = isDebug;
+    }
+
+    /***
+     * 设置Toast出现位置
+     *
+     * @param gravity 设置Toast出现位置
+     ***/
+    public static void setGravity(int gravity) {
+        YUtils.gravity = gravity;
     }
 
     /****
@@ -90,6 +108,24 @@ public class YUtils {
             mToast.setText(text);
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
+        mToast.setGravity(gravity, 0, 0);
+        mToast.show();
+    }
+
+    /****
+     * toast 短提示封装
+     *
+     * @param text    提示内容 字符
+     * @param gravity ttoast 出现位置
+     ***/
+    public static void Toast(String text, int gravity) {
+        if (mToast == null) {
+            mToast = Toast.makeText(mApplicationContent, text, android.widget.Toast.LENGTH_SHORT);
+        } else {
+            mToast.setText(text);
+            mToast.setDuration(Toast.LENGTH_SHORT);
+        }
+        mToast.setGravity(gravity, 0, 0);
         mToast.show();
     }
 
@@ -105,6 +141,7 @@ public class YUtils {
             mToast.setText(resId);
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
+        mToast.setGravity(gravity, 0, 0);
         mToast.show();
     }
 
@@ -120,6 +157,7 @@ public class YUtils {
             mToast.setText(text);
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
+        mToast.setGravity(gravity, 0, 0);
         mToast.show();
     }
 
@@ -135,6 +173,7 @@ public class YUtils {
             mToast.setText(resId);
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
+        mToast.setGravity(gravity, 0, 0);
         mToast.show();
     }
 
@@ -280,6 +319,7 @@ public class YUtils {
         }
         return result;
     }
+
     /**
      * 取ActionBarHeight高度
      *
@@ -344,7 +384,7 @@ public class YUtils {
     /**
      * 复制文本到剪贴板
      *
-     * @param text  复制内容
+     * @param text 复制内容
      */
     public static void copyToClipboard(String text) {
         ClipboardManager cbm = (ClipboardManager) mApplicationContent.getSystemService(Activity.CLIPBOARD_SERVICE);
@@ -428,10 +468,80 @@ public class YUtils {
         }
     }
 
+    /*****
+     * 是否连接WIFI
+     * @param  context 上下文
+     *  @return     boolean
+     * ***/
+    public static boolean isWifiConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (null != activeNetwork) { // connected to the internet
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                return true;
+            } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 网络连接类型
+     *@param  context 上下文
+     * @return  1:wifi 0:4G 3:no internet connection
+     */
+    public static int internetConnType(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (null != activeNetwork) { // connected to the internet
+            return activeNetwork.getType();
+        }
+        return -1;
+    }
+
+    /**
+     * 判断url是否为网址
+     *
+     * @param url
+     * @return URL 链接
+     */
+    public static boolean isHttp(String url) {
+        if (null == url) return false;
+        String regex = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(url);
+        return matcher.matches();
+    }
+
+    /**
+     * 判断应用是否已经启动
+     *
+     * @param context     一个context
+     * @param packageName 要判断应用的包名
+     * @return boolean
+     */
+    public static boolean isAppAlive(Context context, String packageName) {
+        ActivityManager activityManager =
+                (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> processInfos
+                = activityManager.getRunningAppProcesses();
+        for (int i = 0; i < processInfos.size(); i++) {
+            if (processInfos.get(i).processName.equals(packageName)) {
+                Log.i("NotificationLaunch",
+                        String.format("the %s is running, isAppAlive return true", packageName));
+                return true;
+            }
+        }
+        Log.i("NotificationLaunch",
+                String.format("the %s is not running, isAppAlive return false", packageName));
+        return false;
+    }
+
     /**
      * 取APP版本号  code
      *
-     * @return  int
+     * @return int
      */
     public static int getAppVersionCode() {
         return BuildConfig.VERSION_CODE;
@@ -440,7 +550,7 @@ public class YUtils {
     /**
      * 取APP版本名  name
      *
-     * @return    String
+     * @return String
      */
     public static String getAppVersionName() {
         return BuildConfig.VERSION_NAME;
@@ -448,11 +558,12 @@ public class YUtils {
 
 
     /****
-     *Bitmap 放大缩小
-     * @param   b  放大缩小的Bitmap
-     * @param   x  放大缩小比例值 宽
-     * @param   y  放大缩小比例值 宽
-     * ***/
+     * Bitmap 放大缩小
+     *
+     * @param b 放大缩小的Bitmap
+     * @param x 放大缩小比例值 宽
+     * @param y 放大缩小比例值 宽
+     ***/
     public static Bitmap BitmapZoom(Bitmap b, float x, float y) {
         int w = b.getWidth();
         int h = b.getHeight();
@@ -466,11 +577,103 @@ public class YUtils {
     }
 
 
+    /***
+     * 通过资源id 得到uri
+     * @param id
+     * @return id;
+     * ***/
     public static Uri getUriFromRes(int id) {
         return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
                 + mApplicationContent.getResources().getResourcePackageName(id) + "/"
                 + mApplicationContent.getResources().getResourceTypeName(id) + "/"
                 + mApplicationContent.getResources().getResourceEntryName(id));
     }
+    /***
+     * 保留两位小数
+     * @param a  保留数字
+     * **/
+    public static String setDoubleZero(double a) {
+        DecimalFormat df = new DecimalFormat("0.00");
+        return df.format(a);
+    }
 
+    /***
+     * 保留两位小数
+     * @param a  保留字符
+     * **/
+    public static String setDoubleZero(String a) {
+        if (a != null) {
+            DecimalFormat df = new DecimalFormat("0.00");
+            return df.format(Double.parseDouble(a));
+        }
+        return "";
+    }
+
+
+    /**
+     * 通知相册更新资源
+     *
+     * @param context  上下文
+     * @param path    更新资源的路径
+     */
+    public static void sendUpdataAlbum(Context context, String path) {
+        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(path))));
+    }
+
+    /**
+     * 获得独一无二的Psuedo ID
+     * @@return String
+     ***/
+    public static String getUniquePsuedoID() {
+        String serial = null;
+        String m_szDevIDShort = "35" +
+                Build.BOARD.length() % 10 + Build.BRAND.length() % 10 +
+
+                Build.CPU_ABI.length() % 10 + Build.DEVICE.length() % 10 +
+
+                Build.DISPLAY.length() % 10 + Build.HOST.length() % 10 +
+
+                Build.ID.length() % 10 + Build.MANUFACTURER.length() % 10 +
+
+                Build.MODEL.length() % 10 + Build.PRODUCT.length() % 10 +
+
+                Build.TAGS.length() % 10 + Build.TYPE.length() % 10 +
+
+                Build.USER.length() % 10; //13 位
+
+        try {
+            serial = android.os.Build.class.getField("SERIAL").get(null).toString();
+            //API>=9 使用serial号
+            return new UUID(m_szDevIDShort.hashCode(), serial.hashCode()).toString();
+        } catch (Exception exception) {
+            //serial需要一个初始化
+            serial = "serial"; // 随便一个初始化
+        }
+        //使用硬件信息拼凑出来的15位号码
+        return new UUID(m_szDevIDShort.hashCode(), serial.hashCode()).toString();
+    }
+
+    /**
+     * 转换文件大小 字符显示
+     * @param fileS 文件长度单位 b
+     * @return      String
+     */
+    public static String formetFileSizeAll(Long fileS) {
+        DecimalFormat df = new DecimalFormat("#0.00");
+        String fileSizeString = "";
+        String wrongSize = "0B";
+        if (fileS == null || fileS == 0) {
+            return wrongSize;
+        }
+//        fileS = fileS * 1024;
+        if (fileS < 1048576 / 1024) {
+            fileSizeString = df.format((double) fileS / 1024) + "KB";
+        } else if (fileS < 1073741824 / 1024) {
+            fileSizeString = df.format((double) fileS / 1024) + "M";
+        }
+        if (df.format((double) fileS / 1024).equals("0.00")) {
+            fileSizeString = "0.01M";
+        }
+        return fileSizeString;
+    }
 }
