@@ -11,7 +11,8 @@ YUtils  类例如
 获取屏幕宽高。 Toast 提示（防止重复显示） 是否有网络
 手机是否有虚拟导航，状态栏等 单位互相转换dp,px,sp 
 
-` ``Java
+
+` `` Java
 public class App extends Application {
 
     @Override
