@@ -5,7 +5,7 @@
 
 JsonManager  json解析  采用 fastjson
 
-TimeUtils  时间帮类
+TimeUtils  时间类
 除了时间格式化，提供用于视频的时长，和语音的时长的时间格式化
 
 YUtils  类例如
