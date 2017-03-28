@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.TextView;
-import java.lang.ref.SoftReference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -97,38 +96,38 @@ public class TimeUtils extends CountDownTimer {
      * @return String
      */
     public static String getVideoTime(int time) {
-        SoftReference<StringBuilder> softReference = new SoftReference<>(new StringBuilder());
+         StringBuilder softReference =new StringBuilder();
         if (time == 0) {
             return "00:00";
         }
         if (time < 60) {
-            softReference.get().append("00:");
+            softReference.append("00:");
             if (time < 10) {
-                softReference.get().append("0");
-                softReference.get().append(time);
+                softReference.append("0");
+                softReference.append(time);
             } else {
-                softReference.get().append(time);
+                softReference.append(time);
             }
 
         } else {
             int minute = time / 60;
             int second = time % 60;
             if (minute > 10) {
-                softReference.get().append(minute);
-                softReference.get().append(":");
+                softReference.append(minute);
+                softReference.append(":");
             } else {
-                softReference.get().append("0");
-                softReference.get().append(minute);
-                softReference.get().append(":");
+                softReference.append("0");
+                softReference.append(minute);
+                softReference.append(":");
             }
             if (second > 10) {
-                softReference.get().append(second);
+                softReference.append(second);
             } else {
-                softReference.get().append("0");
-                softReference.get().append(second);
+                softReference.append("0");
+                softReference.append(second);
             }
         }
-        return softReference.get().toString();
+        return softReference.toString();
     }
 
     /**
@@ -139,43 +138,43 @@ public class TimeUtils extends CountDownTimer {
      * @return String
      */
     public static String getVideoTime2(Context context, int time) {
-        SoftReference<StringBuilder> softReference = new SoftReference<>(new StringBuilder());
+        StringBuilder softReference = new StringBuilder();
         if (time == 0) {
             return context.getString(R.string.unknown);
         }
         if (time < 60) {
-            softReference.get().append("00");
-            softReference.get().append(context.getString(R.string.branch));
+            softReference.append("00");
+            softReference.append(context.getString(R.string.branch));
             if (time < 10) {
-                softReference.get().append("0");
-                softReference.get().append(time);
-                softReference.get().append(context.getString(R.string.second));
+                softReference.append("0");
+                softReference.append(time);
+                softReference.append(context.getString(R.string.second));
             } else {
-                softReference.get().append(time);
-                softReference.get().append(context.getString(R.string.second));
+                softReference.append(time);
+                softReference.append(context.getString(R.string.second));
             }
 
         } else {
             int minute = time / 60;
             int second = time % 60;
             if (minute > 10) {
-                softReference.get().append(minute);
-                softReference.get().append(context.getString(R.string.branch));
+                softReference.append(minute);
+                softReference.append(context.getString(R.string.branch));
             } else {
-                softReference.get().append("0");
-                softReference.get().append(minute);
-                softReference.get().append(context.getString(R.string.branch));
+                softReference.append("0");
+                softReference.append(minute);
+                softReference.append(context.getString(R.string.branch));
             }
             if (second > 10) {
-                softReference.get().append(second);
-                softReference.get().append(context.getString(R.string.second));
+                softReference.append(second);
+                softReference.append(context.getString(R.string.second));
             } else {
-                softReference.get().append("0");
-                softReference.get().append(second);
-                softReference.get().append(context.getString(R.string.second));
+                softReference.append("0");
+                softReference.append(second);
+                softReference.append(context.getString(R.string.second));
             }
         }
-        return softReference.get().toString();
+        return softReference.toString();
     }
 
     /***
