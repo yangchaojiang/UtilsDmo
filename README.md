@@ -12,7 +12,8 @@ YUtils  类例如
 手机是否有虚拟导航，状态栏等 单位互相转换dp,px,sp 
 
 
-` `` Java
+```java
+
 public class App extends Application {
 
     @Override
