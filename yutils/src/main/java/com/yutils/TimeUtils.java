@@ -2,8 +2,6 @@ package com.yutils;
 
 import android.content.Context;
 import android.os.CountDownTimer;
-import android.view.View;
-import android.widget.TextView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,19 +11,53 @@ import java.util.Date;
  * Created by Ice bing1990 on 2016/3/11.
  * 时间格式帮助类
  */
-public class TimeUtils extends CountDownTimer {
+public class TimeUtils {
     private static final String DATE_TYPE_YDS = "yyyy-MM-dd HH:mm:ss";
     private static final String DATE_TYPE_YD = "yyyy-MM-dd";
     private static final String DATE_TYPE_YDM = "yyyy-MM-dd HH:mm";
     private static final String DATE_TYPE_YDS_2 = "yyyy年MM月dd天HH:mm";
     private static final String DATE_TYPE_YD_CN = "yyyy年MM月";
-    public Context context;
-    private TextView showTimeView;
 
-    public TimeUtils(long millisInFuture, long countDownInterval, View view, Context context) {
-        super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
-        this.context = context;
-        showTimeView = (TextView) view;
+    /****
+     * 倒计时
+     * @param context 上下文
+     * @param millisInFuture 参数依次为总时长  秒
+     * @param  countDownInterval  计时的时间间隔 秒
+     *
+     * ****/
+    public static CountDownTimer countDown( final Context context,long millisInFuture, long countDownInterval,final CountDownListener listener) {
+        CountDownTimer countDownTimer= new CountDownTimer(millisInFuture*1000, countDownInterval*1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+               if (listener!=null&&context!=null){
+                   listener.onTick(millisUntilFinished,(context.getString(R.string.res_date)+"("+ millisUntilFinished / 1000 + ")"+context.getString(R.string.second)));
+               }
+            }
+
+            @Override
+            public void onFinish() {
+                if (listener!=null&&context!=null){
+                    listener.onFinish(context.getResources().getString(R.string.wb_get_verification_code));
+                }
+            }
+        };
+        countDownTimer.start();
+        return countDownTimer;
+    }
+  /***
+   * 倒计时接口
+   * **/
+   public interface   CountDownListener{
+       /***
+        * 计时完毕时触发
+        * @param text  计时完毕时 默认文本
+        * */
+        void  onFinish(String text);
+       /***
+        * @param millisUntilFinished 计时过程数
+        * @param   text         计时过程显示文本
+        * **/
+        void  onTick(long millisUntilFinished,String text);
     }
 
     /**
@@ -292,20 +324,6 @@ public class TimeUtils extends CountDownTimer {
         return timeString;
     }
 
-    @Override
-    public void onFinish() {//计时完毕时触发
-        showTimeView.setTextColor(context.getResources().getColor(android.R.color.holo_blue_dark));
-        showTimeView.setText(context.getResources().getText(R.string.wb_get_verification_code));
-        showTimeView.setClickable(true);
-    }
-
-
-    @Override
-    public void onTick(long millisUntilFinished) {//计时过程显示
-        showTimeView.setClickable(false);
-        showTimeView.setTextColor(context.getResources().getColor(android.R.color.darker_gray));
-        showTimeView.setText("重新获取(" + millisUntilFinished / 1000 + "秒)");
-    }
 
 
     /*****

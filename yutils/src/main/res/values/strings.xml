@@ -5,4 +5,5 @@
     <string name="unknown">未知</string>
     <string name="branch">分</string>
     <string name="second">秒</string>
+    <string name="res_date">重新获取</string>
 </resources>

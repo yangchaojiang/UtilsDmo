@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 20
+    compileSdkVersion 21
     buildToolsVersion "20.0.0"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 20
+        targetSdkVersion 21
     }
     buildTypes {
         release {
@@ -34,7 +34,7 @@ group = "com.ycjiang"   //没有用户名
 //发布到JCenter上的项目名字，必须填写
 def libName = "yuilts"
 // 版本号，下次更新是只需要更改版本号即可
-version = "1.0.2"
+version = "1.0.3"
 /**  上面配置后上传至jcenter后的编译路径是这样的： compile 'cn.bluemobi.dylan:sqlitelibrary:1.0'  **/
 
 //生成源文件

@@ -44,12 +44,12 @@ import java.util.regex.Pattern;
 public class YUtils {
     private static String TAG;
     private static boolean DEBUG = false;
-    private static Context mApplicationContent;
+    private static final ThreadLocal<Context> mApplicationContent = new ThreadLocal<>();
     private static Toast mToast = null;
     private static int gravity = Gravity.BOTTOM;
 
     public static void initialize(Application app) {
-        mApplicationContent = app.getApplicationContext();
+        mApplicationContent.set(app.getApplicationContext());
 
     }
 
@@ -103,7 +103,7 @@ public class YUtils {
      ***/
     public static void Toast(String text) {
         if (mToast == null) {
-            mToast = Toast.makeText(mApplicationContent, text, android.widget.Toast.LENGTH_SHORT);
+            mToast = Toast.makeText(mApplicationContent.get(), text, android.widget.Toast.LENGTH_SHORT);
         } else {
             mToast.setText(text);
             mToast.setDuration(Toast.LENGTH_SHORT);
@@ -120,7 +120,7 @@ public class YUtils {
      ***/
     public static void Toast(String text, int gravity) {
         if (mToast == null) {
-            mToast = Toast.makeText(mApplicationContent, text, android.widget.Toast.LENGTH_SHORT);
+            mToast = Toast.makeText(mApplicationContent.get(), text, android.widget.Toast.LENGTH_SHORT);
         } else {
             mToast.setText(text);
             mToast.setDuration(Toast.LENGTH_SHORT);
@@ -136,7 +136,7 @@ public class YUtils {
      ***/
     public static void Toast(int resId) {
         if (mToast == null) {
-            mToast = Toast.makeText(mApplicationContent, resId, android.widget.Toast.LENGTH_SHORT);
+            mToast = Toast.makeText(mApplicationContent.get(), resId, android.widget.Toast.LENGTH_SHORT);
         } else {
             mToast.setText(resId);
             mToast.setDuration(Toast.LENGTH_SHORT);
@@ -152,7 +152,7 @@ public class YUtils {
      ***/
     public static void ToastLong(String text) {
         if (mToast == null) {
-            mToast = Toast.makeText(mApplicationContent, text, Toast.LENGTH_LONG);
+            mToast = Toast.makeText(mApplicationContent.get(), text, Toast.LENGTH_LONG);
         } else {
             mToast.setText(text);
             mToast.setDuration(Toast.LENGTH_SHORT);
@@ -168,7 +168,7 @@ public class YUtils {
      ***/
     public static void ToastLong(int resId) {
         if (mToast == null) {
-            mToast = Toast.makeText(mApplicationContent, resId, Toast.LENGTH_LONG);
+            mToast = Toast.makeText(mApplicationContent.get(), resId, Toast.LENGTH_LONG);
         } else {
             mToast.setText(resId);
             mToast.setDuration(Toast.LENGTH_SHORT);
@@ -183,7 +183,7 @@ public class YUtils {
      * @param dpValue dp单位
      */
     public static int dip2px(float dpValue) {
-        final float scale = mApplicationContent.getResources().getDisplayMetrics().density;
+        final float scale = mApplicationContent.get().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
 
@@ -193,7 +193,7 @@ public class YUtils {
      * @param spValue sp单位
      */
     public static int sp2px(float spValue) {
-        final float fontScale = mApplicationContent.getResources().getDisplayMetrics().scaledDensity;
+        final float fontScale = mApplicationContent.get().getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
 
@@ -203,7 +203,7 @@ public class YUtils {
      * @param pxValue px单位
      */
     public static int px2dip(float pxValue) {
-        final float scale = mApplicationContent.getResources().getDisplayMetrics().density;
+        final float scale = mApplicationContent.get().getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
 
@@ -214,7 +214,7 @@ public class YUtils {
      * @return int
      */
     public static int getScreenWidth() {
-        DisplayMetrics dm = mApplicationContent.getResources().getDisplayMetrics();
+        DisplayMetrics dm = mApplicationContent.get().getResources().getDisplayMetrics();
         return dm.widthPixels;
     }
 
@@ -224,7 +224,7 @@ public class YUtils {
      * @return int
      */
     public static int getScreenHeight() {
-        DisplayMetrics dm = mApplicationContent.getResources().getDisplayMetrics();
+        DisplayMetrics dm = mApplicationContent.get().getResources().getDisplayMetrics();
         return dm.heightPixels - getStatusBarHeight();
     }
 
@@ -234,21 +234,21 @@ public class YUtils {
      * @return int
      */
     public static int getScreenHeightWithStatusBar() {
-        DisplayMetrics dm = mApplicationContent.getResources().getDisplayMetrics();
+        DisplayMetrics dm = mApplicationContent.get().getResources().getDisplayMetrics();
         return dm.heightPixels;
     }
 
     /**
      * 取导航栏高度
-     *
+     *@param activity 上下文
      * @return int
      */
     public static int getNavigationBarHeight(Activity activity) {
         int result = 0;
-        if (navigationBarExist2(activity)) {
-            int resourceId = mApplicationContent.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+        if (isNavigationBarExist2(activity)) {
+            int resourceId = mApplicationContent.get().getResources().getIdentifier("navigation_bar_height", "dimen", "android");
             if (resourceId > 0) {
-                result = mApplicationContent.getResources().getDimensionPixelSize(resourceId);
+                result = mApplicationContent.get().getResources().getDimensionPixelSize(resourceId);
             }
         }
         return result;
@@ -260,7 +260,7 @@ public class YUtils {
      * @param activity 当前对象的上下文
      * @return boolean
      */
-    public static boolean navigationBarExist2(Activity activity) {
+    public static boolean isNavigationBarExist2(Activity activity) {
         if (Build.VERSION.SDK_INT > 19) {
             WindowManager windowManager = activity.getWindowManager();
             Display d = windowManager.getDefaultDisplay();
@@ -313,9 +313,9 @@ public class YUtils {
      */
     public static int getStatusBarHeight() {
         int result = 0;
-        int resourceId = mApplicationContent.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int resourceId = mApplicationContent.get().getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
-            result = mApplicationContent.getResources().getDimensionPixelSize(resourceId);
+            result = mApplicationContent.get().getResources().getDimensionPixelSize(resourceId);
         }
         return result;
     }
@@ -329,10 +329,10 @@ public class YUtils {
         int actionBarHeight = 0;
 
         final TypedValue tv = new TypedValue();
-        if (mApplicationContent.getTheme()
+        if (mApplicationContent.get().getTheme()
                 .resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
             actionBarHeight = TypedValue.complexToDimensionPixelSize(
-                    tv.data, mApplicationContent.getResources().getDisplayMetrics());
+                    tv.data, mApplicationContent.get().getResources().getDisplayMetrics());
         }
         return actionBarHeight;
     }
@@ -346,7 +346,7 @@ public class YUtils {
     public static void closeInputMethod(Activity act) {
         View view = act.getCurrentFocus();
         if (view != null) {
-            ((InputMethodManager) mApplicationContent.getSystemService(Context.INPUT_METHOD_SERVICE)).
+            ((InputMethodManager) mApplicationContent.get().getSystemService(Context.INPUT_METHOD_SERVICE)).
                     hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
@@ -359,7 +359,7 @@ public class YUtils {
     public static void openInputMethod(Activity activity) {
         View view = activity.getCurrentFocus();
         if (view != null) {
-            ((InputMethodManager) mApplicationContent.getSystemService(Context.INPUT_METHOD_SERVICE)).
+            ((InputMethodManager) mApplicationContent.get().getSystemService(Context.INPUT_METHOD_SERVICE)).
                     toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
@@ -370,11 +370,11 @@ public class YUtils {
      * @return boolean
      */
     public static boolean isBackground() {
-        ActivityManager am = (ActivityManager) mApplicationContent.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager am = (ActivityManager) mApplicationContent.get().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
         if (!tasks.isEmpty()) {
             ComponentName topActivity = tasks.get(0).topActivity;
-            if (!topActivity.getPackageName().equals(mApplicationContent.getPackageName())) {
+            if (!topActivity.getPackageName().equals(mApplicationContent.get().getPackageName())) {
                 return true;
             }
         }
@@ -387,8 +387,8 @@ public class YUtils {
      * @param text 复制内容
      */
     public static void copyToClipboard(String text) {
-        ClipboardManager cbm = (ClipboardManager) mApplicationContent.getSystemService(Activity.CLIPBOARD_SERVICE);
-        cbm.setPrimaryClip(ClipData.newPlainText(mApplicationContent.getPackageName(), text));
+        ClipboardManager cbm = (ClipboardManager) mApplicationContent.get().getSystemService(Activity.CLIPBOARD_SERVICE);
+        cbm.setPrimaryClip(ClipData.newPlainText(mApplicationContent.get().getPackageName(), text));
     }
 
     /**
@@ -397,7 +397,7 @@ public class YUtils {
      * @return SharedPreferences
      */
     public static SharedPreferences getSharedPreference() {
-        return mApplicationContent.getSharedPreferences(mApplicationContent.getPackageName(), Activity.MODE_PRIVATE);
+        return mApplicationContent.get().getSharedPreferences(mApplicationContent.get().getPackageName(), Activity.MODE_PRIVATE);
     }
 
     /**
@@ -406,7 +406,7 @@ public class YUtils {
      * @return SharedPreferences
      */
     public static SharedPreferences getSharedPreference(String name) {
-        return mApplicationContent.getSharedPreferences(name, Activity.MODE_PRIVATE);
+        return mApplicationContent.get().getSharedPreferences(name, Activity.MODE_PRIVATE);
     }
 
     /**
@@ -415,7 +415,7 @@ public class YUtils {
      * @return SharedPreferences
      */
     public static SharedPreferences getSharedPreference(String name, int mode) {
-        return mApplicationContent.getSharedPreferences(name, mode);
+        return mApplicationContent.get().getSharedPreferences(name, mode);
     }
 
 
@@ -452,10 +452,10 @@ public class YUtils {
      * @return boolean
      */
     public static boolean isNetWorkAvailable() {
-        if (mApplicationContent == null) {
+        if (mApplicationContent.get() == null) {
             return false;
         }
-        ConnectivityManager connectivityManager = (ConnectivityManager) mApplicationContent
+        ConnectivityManager connectivityManager = (ConnectivityManager) mApplicationContent.get()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager == null) {
             return false;
@@ -584,9 +584,9 @@ public class YUtils {
      * ***/
     public static Uri getUriFromRes(int id) {
         return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
-                + mApplicationContent.getResources().getResourcePackageName(id) + "/"
-                + mApplicationContent.getResources().getResourceTypeName(id) + "/"
-                + mApplicationContent.getResources().getResourceEntryName(id));
+                + mApplicationContent.get().getResources().getResourcePackageName(id) + "/"
+                + mApplicationContent.get().getResources().getResourceTypeName(id) + "/"
+                + mApplicationContent.get().getResources().getResourceEntryName(id));
     }
     /***
      * 保留两位小数
@@ -655,25 +655,23 @@ public class YUtils {
 
     /**
      * 转换文件大小 字符显示
-     * @param fileS 文件长度单位 b
+     * @param size 文件长度单位 b
      * @return      String
      */
-    public static String formetFileSizeAll(Long fileS) {
-        DecimalFormat df = new DecimalFormat("#0.00");
-        String fileSizeString = "";
-        String wrongSize = "0B";
-        if (fileS == null || fileS == 0) {
-            return wrongSize;
-        }
-//        fileS = fileS * 1024;
-        if (fileS < 1048576 / 1024) {
-            fileSizeString = df.format((double) fileS / 1024) + "KB";
-        } else if (fileS < 1073741824 / 1024) {
-            fileSizeString = df.format((double) fileS / 1024) + "M";
-        }
-        if (df.format((double) fileS / 1024).equals("0.00")) {
-            fileSizeString = "0.01M";
-        }
-        return fileSizeString;
+    public static String formatFileSizeAll(long size) {
+        long kb = 1024;
+        long mb = kb * 1024;
+        long gb = mb * 1024;
+
+        if (size >= gb) {
+            return String.format("%.2f GB", (float) size / gb);
+        } else if (size >= mb) {
+            float f = (float) size / mb;
+            return String.format(f > 100 ?"%.00f MB":"%.2f MB", f);
+        } else if (size >= kb) {
+            float f = (float) size / kb;
+            return String.format(f > 100 ?"%.00f KB":"%.2f KB", f);
+        } else
+            return String.format("%d B", size);
     }
 }
