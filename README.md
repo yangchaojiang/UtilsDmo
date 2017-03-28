@@ -60,8 +60,6 @@ public void onViewClicked(View view) {
                 YUtils.Toast("视频文件："+YUtils.formatFileSizeAll(1500000L));
                 break;
         }
-        
         ···
-       
    更多用法请看类库说明，方法都有注释
  
