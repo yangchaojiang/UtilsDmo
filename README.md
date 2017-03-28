@@ -2,7 +2,18 @@
  
  ##依赖
 `compile 'com.ycjiang:yutils:1.0.0'`
- 
+ ` ``Java
+public class App extends Application {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        YUtils.initialize(this);
+        YUtils.setGravity(Gravity.CENTER);
+    }
+}
+` ``
+
  
 JsonManager  json解析  采用 fastjson
 
