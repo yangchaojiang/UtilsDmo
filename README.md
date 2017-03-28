@@ -1,7 +1,8 @@
 # UtilsDmo
 
  引用 
- compile 'com.ycjiang:yutils:1.0.0'
+##依赖
+`compile 'com.ycjiang:yutils:1.0.0'`
  
  
 JsonManager  json解析  采用 fastjson
