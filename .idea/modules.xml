@@ -2,8 +2,19 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/BubbleimageviewModule/bubbleimageviewmodule.iml" filepath="$PROJECT_DIR$/BubbleimageviewModule/bubbleimageviewmodule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CentertoolbarModule/CentertoolbarModule.iml" filepath="$PROJECT_DIR$/CentertoolbarModule/CentertoolbarModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CircularprogressModule/circularprogressmodule.iml" filepath="$PROJECT_DIR$/CircularprogressModule/circularprogressmodule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Goodviewmodule/goodviewmodule.iml" filepath="$PROJECT_DIR$/Goodviewmodule/goodviewmodule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SheetdialogModule/sheetdialogmodule.iml" filepath="$PROJECT_DIR$/SheetdialogModule/sheetdialogmodule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SidebarModule/sidebarmodule.iml" filepath="$PROJECT_DIR$/SidebarModule/sidebarmodule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TipsviewModule/TipsviewModule.iml" filepath="$PROJECT_DIR$/TipsviewModule/TipsviewModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/UtilsDmo.iml" filepath="$PROJECT_DIR$/UtilsDmo.iml" />
       <module fileurl="file://$PROJECT_DIR$/UtilsDmo.iml" filepath="$PROJECT_DIR$/UtilsDmo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/textdoubleviewmodule/textdoubleviewmodule.iml" filepath="$PROJECT_DIR$/textdoubleviewmodule/textdoubleviewmodule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yutils/yutils.iml" filepath="$PROJECT_DIR$/yutils/yutils.iml" />
       <module fileurl="file://$PROJECT_DIR$/yutils/yutils.iml" filepath="$PROJECT_DIR$/yutils/yutils.iml" />
     </modules>
   </component>

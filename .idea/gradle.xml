@@ -8,7 +8,15 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/BubbleimageviewModule" />
+            <option value="$PROJECT_DIR$/CentertoolbarModule" />
+            <option value="$PROJECT_DIR$/CircularprogressModule" />
+            <option value="$PROJECT_DIR$/Goodviewmodule" />
+            <option value="$PROJECT_DIR$/SheetdialogModule" />
+            <option value="$PROJECT_DIR$/SidebarModule" />
+            <option value="$PROJECT_DIR$/TipsviewModule" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/textdoubleviewmodule" />
             <option value="$PROJECT_DIR$/yutils" />
           </set>
         </option>

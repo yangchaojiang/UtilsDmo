@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--彩色圓形進度條-->
+    <!--自定义加载-->
+    <declare-styleable name="CircularProgress">
+        <attr name="border_Width" format="dimension" />
+        <attr name="color_0" format="color" />
+        <attr name="color_25" format="color" />
+        <attr name="color_50" format="color" />
+        <attr name="color_100" format="color" />
+    </declare-styleable>
+</resources>
