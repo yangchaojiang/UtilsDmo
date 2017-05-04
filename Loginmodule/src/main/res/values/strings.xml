@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">LoginModule</string>
+
+    <string name="login_forget_pwd">忘记密码</string>
+    <string name="please_input_limit_pwd">请输入数字或字母</string>
+    <string name="please_input_limit_pwd_length">密码长度六位以上</string>
+    <string name="login">登录</string>
+    <string name="hint_login_username">请输入手机号码</string>
+    <string name="hint_login_password">输入密码</string>
+    <string name="Registering_new_user">注册新用户</string>
+    <string name="title_dialog">友情提示</string>
+    <string name="rationale_ask_again">"我们需要的一些权限被您拒绝或者系统发生错误申请失败，请您到设置页面手动授权，否则功能无法正常使用</string>
+    <string name="title_settings_dialog">请求权限</string>
+</resources>

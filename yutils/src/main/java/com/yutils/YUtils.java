@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -25,6 +26,7 @@ import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -35,6 +37,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static java.lang.String.*;
 
 /**
  * Created by yangjiang on 2017/1/6.
@@ -240,7 +244,8 @@ public class YUtils {
 
     /**
      * 取导航栏高度
-     *@param activity 上下文
+     *
+     * @param activity 上下文
      * @return int
      */
     public static int getNavigationBarHeight(Activity activity) {
@@ -470,9 +475,10 @@ public class YUtils {
 
     /*****
      * 是否连接WIFI
-     * @param  context 上下文
-     *  @return     boolean
-     * ***/
+     *
+     * @param context 上下文
+     * @return boolean
+     ***/
     public static boolean isWifiConnected(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -488,8 +494,9 @@ public class YUtils {
 
     /**
      * 网络连接类型
-     *@param  context 上下文
-     * @return  1:wifi 0:4G 3:no internet connection
+     *
+     * @param context 上下文
+     * @return 1:wifi 0:4G 3:no internet connection
      */
     public static int internetConnType(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -529,12 +536,12 @@ public class YUtils {
         for (int i = 0; i < processInfos.size(); i++) {
             if (processInfos.get(i).processName.equals(packageName)) {
                 Log.i("NotificationLaunch",
-                        String.format("the %s is running, isAppAlive return true", packageName));
+                        format("the %s is running, isAppAlive return true", packageName));
                 return true;
             }
         }
         Log.i("NotificationLaunch",
-                String.format("the %s is not running, isAppAlive return false", packageName));
+                format("the %s is not running, isAppAlive return false", packageName));
         return false;
     }
 
@@ -579,19 +586,22 @@ public class YUtils {
 
     /***
      * 通过资源id 得到uri
+     *
      * @param id
      * @return id;
-     * ***/
+     ***/
     public static Uri getUriFromRes(int id) {
         return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
                 + mApplicationContent.get().getResources().getResourcePackageName(id) + "/"
                 + mApplicationContent.get().getResources().getResourceTypeName(id) + "/"
                 + mApplicationContent.get().getResources().getResourceEntryName(id));
     }
+
     /***
      * 保留两位小数
-     * @param a  保留数字
-     * **/
+     *
+     * @param a 保留数字
+     **/
     public static String setDoubleZero(double a) {
         DecimalFormat df = new DecimalFormat("0.00");
         return df.format(a);
@@ -599,8 +609,9 @@ public class YUtils {
 
     /***
      * 保留两位小数
-     * @param a  保留字符
-     * **/
+     *
+     * @param a 保留字符
+     **/
     public static String setDoubleZero(String a) {
         if (a != null) {
             DecimalFormat df = new DecimalFormat("0.00");
@@ -613,7 +624,7 @@ public class YUtils {
     /**
      * 通知相册更新资源
      *
-     * @param context  上下文
+     * @param context 上下文
      * @param path    更新资源的路径
      */
     public static void sendUpdataAlbum(Context context, String path) {
@@ -622,6 +633,7 @@ public class YUtils {
 
     /**
      * 获得独一无二的Psuedo ID
+     *
      * @@return String
      ***/
     public static String getUniquePsuedoID() {
@@ -655,8 +667,9 @@ public class YUtils {
 
     /**
      * 转换文件大小 字符显示
+     *
      * @param size 文件长度单位 b
-     * @return      String
+     * @return String
      */
     public static String formatFileSizeAll(long size) {
         long kb = 1024;
@@ -664,14 +677,44 @@ public class YUtils {
         long gb = mb * 1024;
 
         if (size >= gb) {
-            return String.format("%.2f GB", (float) size / gb);
+            return format("%.2f GB", (float) size / gb);
         } else if (size >= mb) {
             float f = (float) size / mb;
-            return String.format(f > 100 ?"%.00f MB":"%.2f MB", f);
+            return format(f > 100 ? "%.00f MB" : "%.2f MB", f);
         } else if (size >= kb) {
             float f = (float) size / kb;
-            return String.format(f > 100 ?"%.00f KB":"%.2f KB", f);
+            return format(f > 100 ? "%.00f KB" : "%.2f KB", f);
         } else
-            return String.format("%d B", size);
+            return format("%d B", size);
+    }
+
+    /**
+     * 1、获取main在窗体的可视区域
+     * 2、获取main在窗体的不可视区域高度
+     * 3、判断不可视区域高度
+     * 1、大于100：键盘显示  获取Scroll的窗体坐标
+     * 算出main需要滚动的高度，使scroll显示。
+     * 2、小于100：键盘隐藏
+     *
+     * @param main   根布局
+     * @param scroll 需要显示的最下方View
+     */
+    public static void addLayoutListener(final View main, final View scroll) {
+        main.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect rect = new Rect();
+                main.getWindowVisibleDisplayFrame(rect);
+                int mainInvisibleHeight = main.getRootView().getHeight() - rect.bottom;
+                if (mainInvisibleHeight > 100) {
+                    int[] location = new int[2];
+                    scroll.getLocationInWindow(location);
+                    int srollHeight = (location[1] + scroll.getHeight()) - rect.bottom;
+                    main.scrollTo(0, srollHeight);
+                } else {
+                    main.scrollTo(0, 0);
+                }
+            }
+        });
     }
 }

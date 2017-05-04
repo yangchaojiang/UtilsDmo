@@ -1,0 +1,56 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <!-- 富文本编辑器 -->
+    <com.yangc.richeditorlibrary.view.editor.SortRichEditor
+
+        android:id="@+id/richEditor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/relay_option"
+        android:background="#fff" />
+
+    <!-- 底部的按钮 -->
+    <RelativeLayout
+        android:id="@+id/relay_option"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#F1F1F1">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/iv_gallery"
+            android:layout_width="35dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="22dp"
+            android:gravity="center_horizontal"
+            app:srcCompat="@drawable/ic_gallery_image" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/iv_camera"
+            android:layout_width="35dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="25dp"
+            android:layout_toRightOf="@id/iv_gallery"
+            android:gravity="center_horizontal"
+            app:srcCompat="@drawable/ic_icon_camera" />
+
+        <Button
+            android:id="@+id/btn_posts"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="#4ca4e9"
+            android:text="保存"
+            android:textColor="@android:color/white" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,1 +1,1 @@
-include ':app', ':yutils', ':SheetdialogModule', ':SidebarModule', ':CircularprogressModule', ':BubbleimageviewModule', ':TipsviewModule', ':Goodviewmodule', ':CentertoolbarModule', ':textdoubleviewmodule'
+include ':app', ':Yutils', ':SheetdialogModule', ':SidebarModule', ':CircularprogressModule', ':BubbleimageviewModule', ':TipsviewModule', ':Goodviewmodule', ':CentertoolbarModule', ':Textdoubleviewmodule', ':Loginmodule', ':Tabmodule', ':Richeditorlibrary', ':SearchLibrary'

@@ -12,12 +12,16 @@
             <option value="$PROJECT_DIR$/CentertoolbarModule" />
             <option value="$PROJECT_DIR$/CircularprogressModule" />
             <option value="$PROJECT_DIR$/Goodviewmodule" />
+            <option value="$PROJECT_DIR$/Loginmodule" />
+            <option value="$PROJECT_DIR$/Richeditorlibrary" />
+            <option value="$PROJECT_DIR$/SearchLibrary" />
             <option value="$PROJECT_DIR$/SheetdialogModule" />
             <option value="$PROJECT_DIR$/SidebarModule" />
+            <option value="$PROJECT_DIR$/Tabmodule" />
+            <option value="$PROJECT_DIR$/Textdoubleviewmodule" />
             <option value="$PROJECT_DIR$/TipsviewModule" />
+            <option value="$PROJECT_DIR$/Yutils" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/textdoubleviewmodule" />
-            <option value="$PROJECT_DIR$/yutils" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
