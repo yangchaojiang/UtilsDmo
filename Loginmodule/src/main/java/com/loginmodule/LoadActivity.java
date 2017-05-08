@@ -22,25 +22,31 @@ import java.util.List;
  * E-Mail:yangchaojiang@outlook.com
  * Deprecated: 默认加载页
  */
-public class LoadActivity extends AppCompatActivity {
+public abstract class LoadActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_PERMISSION_OTHER = 101;
     private static final int REQUEST_CODE_SETTING = 300;
 
+    //    public String[] pre = {Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.load_activity);
         cameraTask();
 
     }
 
-    //已经获取权限可以开始业务
-    private void startApp() {
+    /****
+     * 已经获取权限可以开始业务
+     ***/
+    protected abstract void startApp();
 
-    }
+    /***
+     * 重写该方法赋予想要权限
+     ***/
+    protected abstract String[] permission();
 
     /****
      * 权限适配
@@ -116,8 +122,7 @@ public class LoadActivity extends AppCompatActivity {
     private void requestPermission() {
         AndPermission.with(this)
                 .requestCode(REQUEST_CODE_PERMISSION_OTHER)
-                .permission(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE)
+                .permission(permission())
                 // rationale作用是：用户拒绝一次权限，再次申请时先征求用户同意，再打开授权对话框，避免用户勾选不再提示。
                 .rationale(new RationaleListener() {
                     @Override

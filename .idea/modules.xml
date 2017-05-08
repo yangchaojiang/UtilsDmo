@@ -2,19 +2,28 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Aliosslibrary/Aliosslibrary.iml" filepath="$PROJECT_DIR$/Aliosslibrary/Aliosslibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/BubbleimageviewModule/BubbleimageviewModule.iml" filepath="$PROJECT_DIR$/BubbleimageviewModule/BubbleimageviewModule.iml" />
       <module fileurl="file://$PROJECT_DIR$/CentertoolbarModule/CentertoolbarModule.iml" filepath="$PROJECT_DIR$/CentertoolbarModule/CentertoolbarModule.iml" />
       <module fileurl="file://$PROJECT_DIR$/CircularprogressModule/CircularprogressModule.iml" filepath="$PROJECT_DIR$/CircularprogressModule/CircularprogressModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Gildemodule/Gildemodule.iml" filepath="$PROJECT_DIR$/Gildemodule/Gildemodule.iml" />
       <module fileurl="file://$PROJECT_DIR$/Goodviewmodule/Goodviewmodule.iml" filepath="$PROJECT_DIR$/Goodviewmodule/Goodviewmodule.iml" />
       <module fileurl="file://$PROJECT_DIR$/Loginmodule/Loginmodule.iml" filepath="$PROJECT_DIR$/Loginmodule/Loginmodule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PayModule/PayModule.iml" filepath="$PROJECT_DIR$/PayModule/PayModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PicassoModule/PicassoModule.iml" filepath="$PROJECT_DIR$/PicassoModule/PicassoModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Retrofitmodule/Retrofitmodule.iml" filepath="$PROJECT_DIR$/Retrofitmodule/Retrofitmodule.iml" />
       <module fileurl="file://$PROJECT_DIR$/Richeditorlibrary/Richeditorlibrary.iml" filepath="$PROJECT_DIR$/Richeditorlibrary/Richeditorlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/SearchLibrary/SearchLibrary.iml" filepath="$PROJECT_DIR$/SearchLibrary/SearchLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ShareloginModule/ShareloginModule.iml" filepath="$PROJECT_DIR$/ShareloginModule/ShareloginModule.iml" />
       <module fileurl="file://$PROJECT_DIR$/SheetdialogModule/SheetdialogModule.iml" filepath="$PROJECT_DIR$/SheetdialogModule/SheetdialogModule.iml" />
       <module fileurl="file://$PROJECT_DIR$/SidebarModule/SidebarModule.iml" filepath="$PROJECT_DIR$/SidebarModule/SidebarModule.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Tabmodule/tabmodule.iml" filepath="$PROJECT_DIR$/Tabmodule/tabmodule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Tabmodule/Tabmodule.iml" filepath="$PROJECT_DIR$/Tabmodule/Tabmodule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Tengxunyun/Tengxunyun.iml" filepath="$PROJECT_DIR$/Tengxunyun/Tengxunyun.iml" />
       <module fileurl="file://$PROJECT_DIR$/Textdoubleviewmodule/Textdoubleviewmodule.iml" filepath="$PROJECT_DIR$/Textdoubleviewmodule/Textdoubleviewmodule.iml" />
       <module fileurl="file://$PROJECT_DIR$/TipsviewModule/TipsviewModule.iml" filepath="$PROJECT_DIR$/TipsviewModule/TipsviewModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TranslateModule/TranslateModule.iml" filepath="$PROJECT_DIR$/TranslateModule/TranslateModule.iml" />
       <module fileurl="file://$PROJECT_DIR$/UtilsDmo.iml" filepath="$PROJECT_DIR$/UtilsDmo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Xunfeimodule/Xunfeimodule.iml" filepath="$PROJECT_DIR$/Xunfeimodule/Xunfeimodule.iml" />
       <module fileurl="file://$PROJECT_DIR$/Yutils/Yutils.iml" filepath="$PROJECT_DIR$/Yutils/Yutils.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
