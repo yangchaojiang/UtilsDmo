@@ -43,6 +43,17 @@ public class ImageLoader {
     }
 
     /***
+     * 设置默认图
+     *
+     * @param defaultRes   默认加载图
+     * @param defaultError 默认失败图
+     **/
+    public void defaultImage(int defaultRes, int defaultError) {
+        this.defaultRes = defaultRes;
+        this.defaultError = defaultError;
+    }
+
+    /***
      * 初始化日志
      *
      * @param context application

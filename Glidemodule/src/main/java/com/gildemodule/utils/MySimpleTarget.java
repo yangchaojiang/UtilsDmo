@@ -8,7 +8,7 @@ import android.graphics.drawable.Drawable;
  * Deprecated:
  */
 
-public interface SimpleTarget<T> {
+public interface MySimpleTarget<T> {
     /**
      * Callback when an image has been successfully loaded.
      * <p>
