@@ -50,8 +50,8 @@ public class OSSService {
     private volatile static Context mApplicationContent;
     private static final String TAG = "OSSService";
     private static String ENDPOINT = "";
-    private static String accessKeyId = "LTAIPG2k7kkeF1wh";
-    private static String accessKeySecret = "ZTIve12jhiKY7wi79uhNjQgy9c3vEA";
+    private static String accessKeyId = "";
+    private static String accessKeySecret = "";
     private boolean isDebug = false;
     private String bucket;//getBucket名称
     private StringBuilder stringBuilder = new StringBuilder();
@@ -61,8 +61,8 @@ public class OSSService {
         try {
             props.load(OSSService.class.getResourceAsStream("/assets/a.properties"));
             ENDPOINT = props.getProperty("ENDPOINT");
-            accessKeyId = props.getProperty("LTAIPG2k7kkeF1wh");
-            accessKeySecret = props.getProperty("ZTIve12jhiKY7wi79uhNjQgy9c3vEA");
+            accessKeyId = props.getProperty("");
+            accessKeySecret = props.getProperty("");
             Log.e(TAG, "加载配置文件ok");
         } catch (IOException e) {
             Log.e(TAG, "加载配置文件失败" + e.getMessage());
