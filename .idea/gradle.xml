@@ -8,29 +8,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/Aliosslibrary" />
-            <option value="$PROJECT_DIR$/BubbleimageviewModule" />
-            <option value="$PROJECT_DIR$/CentertoolbarModule" />
-            <option value="$PROJECT_DIR$/CircularprogressModule" />
-            <option value="$PROJECT_DIR$/Glidemodule" />
-            <option value="$PROJECT_DIR$/Goodviewmodule" />
-            <option value="$PROJECT_DIR$/Loginmodule" />
-            <option value="$PROJECT_DIR$/PayModule" />
-            <option value="$PROJECT_DIR$/PicassoModule" />
-            <option value="$PROJECT_DIR$/Retrofitmodule" />
             <option value="$PROJECT_DIR$/Richeditorlibrary" />
-            <option value="$PROJECT_DIR$/SearchLibrary" />
-            <option value="$PROJECT_DIR$/ShareloginModule" />
-            <option value="$PROJECT_DIR$/SheetdialogModule" />
-            <option value="$PROJECT_DIR$/SidebarModule" />
-            <option value="$PROJECT_DIR$/Tabmodule" />
-            <option value="$PROJECT_DIR$/Tengxunyun" />
-            <option value="$PROJECT_DIR$/Textdoubleviewmodule" />
-            <option value="$PROJECT_DIR$/TipsviewModule" />
-            <option value="$PROJECT_DIR$/TranslateModule" />
-            <option value="$PROJECT_DIR$/Xunfeimodule" />
-            <option value="$PROJECT_DIR$/Yutils" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/yutils" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

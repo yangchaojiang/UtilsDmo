@@ -85,6 +85,7 @@ install {
                         url siteUrl
                     }
                 }
+
                 scm {
                     connection gitUrl
                     developerConnection gitUrl

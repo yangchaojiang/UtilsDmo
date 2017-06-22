@@ -2,7 +2,6 @@ package com.example.yangjiang.utilsdmo;
 
 import android.app.Application;
 
-import com.tengxunyun.OSSService;
 import com.yutils.YUtils;
 
 
@@ -18,8 +17,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         YUtils.initialize(this);
-        OSSService.getInstance().init(this);
-        OSSService.getInstance().creareDir();
 
     }
 }
