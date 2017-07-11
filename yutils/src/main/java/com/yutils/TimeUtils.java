@@ -12,11 +12,11 @@ import java.util.Date;
  * 时间格式帮助类
  */
 public class TimeUtils {
-    private static final String DATE_TYPE_YDS = "yyyy-MM-dd HH:mm:ss";
-    private static final String DATE_TYPE_YD = "yyyy-MM-dd";
-    private static final String DATE_TYPE_YDM = "yyyy-MM-dd HH:mm";
-    private static final String DATE_TYPE_YDS_2 = "yyyy年MM月dd天HH:mm";
-    private static final String DATE_TYPE_YD_CN = "yyyy年MM月";
+    public static final String DATE_TYPE_YDS = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_TYPE_YD = "yyyy-MM-dd";
+    public static final String DATE_TYPE_YDM = "yyyy-MM-dd HH:mm";
+    public static final String DATE_TYPE_YDS_2 = "yyyy年MM月dd天HH:mm";
+    public static final String DATE_TYPE_YD_CN = "yyyy年MM月";
 
     /****
      * 倒计时
@@ -102,7 +102,6 @@ public class TimeUtils {
             e.printStackTrace();
             return new Date();
         }
-
     }
 
     /**
@@ -246,9 +245,10 @@ public class TimeUtils {
      * 得到完整的时间字符  英文 到秒
      *
      * @param date 格式化的时间
+     * @param   pattern 果然是类型
      * @return String
      **/
-    public static String getDataTimeString(Date date) {
+    public static String getDataTimeString(Date date,String pattern) {
         SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateTimeInstance();
         formatter.applyLocalizedPattern(DATE_TYPE_YDS);
         return formatter.format(date);
@@ -266,24 +266,25 @@ public class TimeUtils {
         formatter.applyLocalizedPattern(DATE_TYPE_YDS_2);
         return formatter.format(date);
     }
-
     /*****
-     * 得到完整的时间字符  - 天
+     * 得到完整的时间字符  中文 到秒
      *
      * @param date 格式化的时间字符
+     * @param    pattern 格式化字符
      * @return String
+     *
      **/
-    public static String getDataMString(String date) {
-        if (date == null || date.isEmpty()) {
-            return getDataString1(new Date());
-        }
+    public static String formData(String date,String pattern) {
         SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateTimeInstance();
-        formatter.applyLocalizedPattern(DATE_TYPE_YD);
-        String timeString;
-        Date date2 = getDateTime(date);
-        timeString = getDataString1(date2);
-        return timeString;
+           formatter.applyLocalizedPattern(pattern);
+        try {
+            return getDataString1(formatter.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return  date;
+        }
     }
+
 
     private static String getDataString1(Date date) {
         SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
@@ -301,6 +302,7 @@ public class TimeUtils {
         formatter.applyLocalizedPattern(DATE_TYPE_YDS);
         return getDateTime(formatter.format(date));
     }
+
 
     /*****
      * 得到完整的时间字符
@@ -321,25 +323,6 @@ public class TimeUtils {
             e.printStackTrace();
             return formatter.format(new Date());
         }
-        return timeString;
-    }
-
-
-
-    /*****
-     * 得到中文年月的时间字符
-     *
-     * @param date 格式化的时间
-     **/
-    public static String getDateYmString(String date) {
-        SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-        formatter.applyLocalizedPattern(DATE_TYPE_YD_CN);
-        if (date == null || date.isEmpty()) {
-            return formatter.format(new Date());
-        }
-        String timeString;
-        Date date2 = getDateTime(date);
-        timeString = formatter.format(date2);
         return timeString;
     }
 
