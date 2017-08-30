@@ -5,11 +5,11 @@ package com.yutils;
  * E-Mail:1007181167@qq.com
  * Description:  日志帮助类
  */
-public final class Log {
+public final class Logger {
     public static boolean isPrint = true;
-    private static String defaultTag = "Log";
+    private static String defaultTag = "Logger";
 
-    private Log() {
+    private Logger() {
     }
 
     public static void setTag(String tag) {

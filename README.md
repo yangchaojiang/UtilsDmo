@@ -2,7 +2,7 @@
  
  ##依赖
  ````
-   compile 'com.ycjiang:Yutils:1.0.5'
+   compile 'com.ycjiang:Yutils:1.1.3'
  ````
 
 JsonManager  json解析  采用 fastjson
@@ -62,6 +62,13 @@ public void onViewClicked(View view) {
                 YUtils.Toast("视频文件："+YUtils.formatFileSizeAll(1500000L));
                 break;
         }
-        ···
+      }
+```
    更多用法请看类库说明，方法都有注释
- 
+ ###  1.1.3
+   * 1.修改TimeUtils 方法 get  换成from
+   * 2.YFileUtils 帮助类
+   * 3.增加 网络帮助类NetworkUtils  移除YUtils 网络方法
+   * 4.修改日志 log 类名为Logger
+
+

@@ -17,12 +17,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
+
+import static java.lang.String.format;
+
 /**
  * Created by yangjiang on 2017/1/6.
  * E-Mail:1007181167@qq.com
  * Description:  文件操作帮助类
  */
-public class MyFileUtil {
+public class YFileUtils {
 
 
     /****
@@ -59,7 +62,7 @@ public class MyFileUtil {
 //        if (null == filePath || filePath.isEmpty() || filePath.equals(""))
 //            return res = R.mipmap.ic_stub;
 //        String type = filePath.toLowerCase().substring(filePath.lastIndexOf("."));//统一转换小写
-//        Log.v("getFileType", type);
+//        Logger.v("getFileType", type);
 //        if (type.equals(".doc") || type.equals(".docx")) {
 //            res = R.mipmap.icon_friend_word;
 //        } else if (type.equals(".xls") || type.equals(".xlsx")) {
@@ -465,5 +468,26 @@ public class MyFileUtil {
         return buffer.toString();
     }
 
+    /**
+     * 转换文件大小 字符显示
+     *
+     * @param size 文件长度单位 b
+     * @return String
+     */
+    public static String formatFileSizeAll(long size) {
+        long kb = 1024;
+        long mb = kb * 1024;
+        long gb = mb * 1024;
 
+        if (size >= gb) {
+            return format("%.2f GB", (float) size / gb);
+        } else if (size >= mb) {
+            float f = (float) size / mb;
+            return format(f > 100 ? "%.00f MB" : "%.2f MB", f);
+        } else if (size >= kb) {
+            float f = (float) size / kb;
+            return format(f > 100 ? "%.00f KB" : "%.2f KB", f);
+        } else
+            return format("%d B", size);
+    }
 }

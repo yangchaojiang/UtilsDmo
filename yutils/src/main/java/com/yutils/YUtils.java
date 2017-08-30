@@ -1,5 +1,6 @@
 package com.yutils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
@@ -10,6 +11,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Rect;
@@ -17,6 +20,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -29,9 +33,13 @@ import android.view.ViewConfiguration;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.UUID;
@@ -46,14 +54,15 @@ import static java.lang.String.*;
  * Description:  帮助类
  */
 public class YUtils {
+    @SuppressLint("StaticFieldLeak")
     private static String TAG;
     private static boolean DEBUG = false;
-    private static final ThreadLocal<Context> mApplicationContent = new ThreadLocal<>();
+    private static final ThreadLocal<Application> mApplicationContent = new ThreadLocal<>();
     private static Toast mToast = null;
     private static int gravity = Gravity.BOTTOM;
 
     public static void initialize(Application app) {
-        mApplicationContent.set(app.getApplicationContext());
+        mApplicationContent.set(app);
 
     }
 
@@ -293,8 +302,8 @@ public class YUtils {
      */
     public static boolean checkDeviceHasNavigationBar(Context activity) {
 //通过判断设备是否有返回键、菜单键(不是虚拟键,是手机屏幕外的按键)来确定是否有navigation bar
-        boolean hasMenuKey = false;
-        boolean hasBackKey = false;
+        boolean hasMenuKey ;
+        boolean hasBackKey ;
 
         try {
             hasMenuKey = ViewConfiguration.get(activity).hasPermanentMenuKey();
@@ -346,28 +355,15 @@ public class YUtils {
     /**
      * 关闭输入法
      *
-     * @param act 当前显示
+     * @param v 当前显示view
      */
-    public static void closeInputMethod(Activity act) {
-        View view = act.getCurrentFocus();
-        if (view != null) {
-            ((InputMethodManager) mApplicationContent.get().getSystemService(Context.INPUT_METHOD_SERVICE)).
-                    hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    public static void closeInputMethod(EditText v) {
+        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive()) {
+            imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
         }
     }
 
-    /**
-     * 关闭输入法
-     *
-     * @param activity 当前显示
-     */
-    public static void openInputMethod(Activity activity) {
-        View view = activity.getCurrentFocus();
-        if (view != null) {
-            ((InputMethodManager) mApplicationContent.get().getSystemService(Context.INPUT_METHOD_SERVICE)).
-                    toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-        }
-    }
 
     /**
      * 判断应用是否处于后台状态
@@ -384,6 +380,24 @@ public class YUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * 开启软键盘
+     * @param v
+     */
+    public static void showKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(v, InputMethodManager.SHOW_FORCED);
+    }
+
+    /**
+     * 开启软键盘
+     * @param et
+     */
+    public static void openSoftKeyboard(EditText et) {
+        InputMethodManager inputManager = (InputMethodManager) et.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.showSoftInput(et,0);
     }
 
     /**
@@ -424,88 +438,6 @@ public class YUtils {
     }
 
 
-    /**
-     * 经纬度测距
-     *
-     * @param jingdu1
-     * @param weidu1
-     * @param jingdu2
-     * @param weidu2
-     * @return
-     */
-    public static double distance(double jingdu1, double weidu1, double jingdu2, double weidu2) {
-        double a, b, R;
-        R = 6378137; // 地球半径
-        weidu1 = weidu1 * Math.PI / 180.0;
-        weidu2 = weidu2 * Math.PI / 180.0;
-        a = weidu1 - weidu2;
-        b = (jingdu1 - jingdu2) * Math.PI / 180.0;
-        double d;
-        double sa2, sb2;
-        sa2 = Math.sin(a / 2.0);
-        sb2 = Math.sin(b / 2.0);
-        d = 2
-                * R
-                * Math.asin(Math.sqrt(sa2 * sa2 + Math.cos(weidu1)
-                * Math.cos(weidu2) * sb2 * sb2));
-        return d;
-    }
-
-    /**
-     * 是否有网络
-     *
-     * @return boolean
-     */
-    public static boolean isNetWorkAvailable() {
-        if (mApplicationContent.get() == null) {
-            return false;
-        }
-        ConnectivityManager connectivityManager = (ConnectivityManager) mApplicationContent.get()
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager == null) {
-            return false;
-        }
-        NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
-        if (activeNetInfo == null || !activeNetInfo.isAvailable()) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    /*****
-     * 是否连接WIFI
-     *
-     * @param context 上下文
-     * @return boolean
-     ***/
-    public static boolean isWifiConnected(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (null != activeNetwork) { // connected to the internet
-            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-                return true;
-            } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-                return false;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 网络连接类型
-     *
-     * @param context 上下文
-     * @return 1:wifi 0:4G 3:no internet connection
-     */
-    public static int internetConnType(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (null != activeNetwork) { // connected to the internet
-            return activeNetwork.getType();
-        }
-        return -1;
-    }
 
     /**
      * 判断url是否为网址
@@ -551,7 +483,17 @@ public class YUtils {
      * @return int
      */
     public static int getAppVersionCode() {
-        return BuildConfig.VERSION_CODE;
+        int version = 1;
+        try {
+            // 获取packagemanager的实例
+            PackageManager packageManager = mApplicationContent.get().getPackageManager();
+            // getPackageName()是你当前类的包名，0代表是获取版本信息
+            PackageInfo packInfo = packageManager.getPackageInfo(mApplicationContent.get().getPackageName(), 0);
+            version = packInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return version;
     }
 
     /**
@@ -560,7 +502,17 @@ public class YUtils {
      * @return String
      */
     public static String getAppVersionName() {
-        return BuildConfig.VERSION_NAME;
+        String version = "1.0";
+        try {
+            // 获取packagemanager的实例
+            PackageManager packageManager = mApplicationContent.get().getPackageManager();
+            // getPackageName()是你当前类的包名，0代表是获取版本信息
+            PackageInfo packInfo = packageManager.getPackageInfo(mApplicationContent.get().getPackageName(), 0);
+            version = packInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return version;
     }
 
 
@@ -627,7 +579,7 @@ public class YUtils {
      * @param context 上下文
      * @param path    更新资源的路径
      */
-    public static void sendUpdataAlbum(Context context, String path) {
+    public static void sendUpdataSystemAlbum(Context context, String path) {
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(path))));
     }
 
@@ -665,28 +617,7 @@ public class YUtils {
         return new UUID(m_szDevIDShort.hashCode(), serial.hashCode()).toString();
     }
 
-    /**
-     * 转换文件大小 字符显示
-     *
-     * @param size 文件长度单位 b
-     * @return String
-     */
-    public static String formatFileSizeAll(long size) {
-        long kb = 1024;
-        long mb = kb * 1024;
-        long gb = mb * 1024;
 
-        if (size >= gb) {
-            return format("%.2f GB", (float) size / gb);
-        } else if (size >= mb) {
-            float f = (float) size / mb;
-            return format(f > 100 ? "%.00f MB" : "%.2f MB", f);
-        } else if (size >= kb) {
-            float f = (float) size / kb;
-            return format(f > 100 ? "%.00f KB" : "%.2f KB", f);
-        } else
-            return format("%d B", size);
-    }
 
     /**
      * 1、获取main在窗体的可视区域
@@ -716,5 +647,22 @@ public class YUtils {
                 }
             }
         });
+    }
+
+
+    private YUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
+
+
+    /**
+     * 获取Application
+     *
+     * @return Application
+     */
+    public static Application getApp() {
+        if (mApplicationContent.get() != null) return mApplicationContent.get();
+        throw new NullPointerException("u should init first");
     }
 }

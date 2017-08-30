@@ -8,8 +8,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.yutils.JsonManager;
-import com.yutils.Log;
+import com.yutils.Logger;
+import com.yutils.NetworkUtils;
 import com.yutils.TimeUtils;
+import com.yutils.YFileUtils;
 import com.yutils.YUtils;
 
 import java.util.ArrayList;
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     Button button7;
     @Bind(R.id.button8)
     Button button8;
+    @Bind(R.id.button9)
+    Button button9;
     @Bind(R.id.activity_main)
     LinearLayout activityMain;
   List<String> list=new ArrayList<>();
@@ -53,15 +57,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.button2, R.id.button3, R.id.button4,R.id.button5, R.id.button6, R.id.button7, R.id.button8})
+    @OnClick({R.id.button2, R.id.button3, R.id.button4,R.id.button5, R.id.button6, R.id.button7, R.id.button8,R.id.button9})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.button2:
-                Log.d("MainActivity","asdasda");
+                Logger.d("MainActivity","asdasda");
                 YUtils.Toast("哈哈");
                 break;
             case R.id.button3:
-                YUtils.Toast(TimeUtils.getDataTimeCNString(new Date()));
+                YUtils.Toast(TimeUtils.formDateString(new Date(),TimeUtils.DATE_TYPE_YD));
                 break;
             case R.id.button4:
                 YUtils.Toast("是否虚拟导航键："+YUtils.isNavigationBarExist2(this));
@@ -84,10 +88,13 @@ public class MainActivity extends AppCompatActivity {
                 });
                 break;
             case R.id.button7:
-                YUtils.Toast("视频时长："+TimeUtils.getVideoTime(100));
+                YUtils.Toast("视频时长："+TimeUtils.fromVideoTime(100));
                 break;
             case R.id.button8:
-                YUtils.Toast("视频文件："+YUtils.formatFileSizeAll(1500000L));
+                YUtils.Toast("视频文件："+ YFileUtils.formatFileSizeAll(1500000L));
+                break;
+            case R.id.button9:
+                YUtils.Toast("网络："+ NetworkUtils.isNetWorkAvailable());
                 break;
         }
     }

@@ -8,12 +8,10 @@ package com.yutils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.alibaba.fastjson.util.TypeUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.List;
 
 /**
@@ -57,7 +55,7 @@ public class JsonManager {
      */
     public static String beanToJson(Object obj) {
         String result = JSON.toJSONString(obj);
-        Log.d("json", result);
+        Log.d("JsonManager", result);
         return result;
     }
 
@@ -70,27 +68,28 @@ public class JsonManager {
      */
     public static String beanToJson(Object obj, SimplePropertyPreFilter filter) {
         String result = JSON.toJSONString(obj, filter);
-        Log.v("json", result);
+        Log.v("JsonManager", result);
         return result;
     }
 
+
     /**
-     * 判断JSONObject中是否包含指定的key
+     * 价格json字符转换JSONObject
+     * @param   jsonString   需要转换的字符
+     *@return     JSONObject
      */
-    public static String getJsonValue(JSONObject jsonObject, String str) {
-        try {
-            if (jsonObject.has(str)) {
-                return jsonObject.getString(str);
-            } else {
-                return null;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static JSONObject parseJsonObject(String jsonString){
+        return JSONObject.parseObject(jsonString);
     }
 
-
+    /**
+     * 价格json字符转换JSONObject
+     * @param   jsonString   需要转换的字符
+     *@return     JSONObject
+     */
+    public static JSONArray parseJsonArray(String jsonString){
+        return JSONArray.parseArray(jsonString);
+    }
 
 }
 

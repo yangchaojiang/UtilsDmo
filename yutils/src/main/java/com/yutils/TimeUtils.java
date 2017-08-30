@@ -2,6 +2,7 @@ package com.yutils;
 
 import android.content.Context;
 import android.os.CountDownTimer;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,29 +15,28 @@ import java.util.Date;
 public class TimeUtils {
     public static final String DATE_TYPE_YDS = "yyyy-MM-dd HH:mm:ss";
     public static final String DATE_TYPE_YD = "yyyy-MM-dd";
-    public static final String DATE_TYPE_YDM = "yyyy-MM-dd HH:mm";
     public static final String DATE_TYPE_YDS_2 = "yyyy年MM月dd天HH:mm";
     public static final String DATE_TYPE_YD_CN = "yyyy年MM月";
 
     /****
      * 倒计时
-     * @param context 上下文
-     * @param millisInFuture 参数依次为总时长  秒
-     * @param  countDownInterval  计时的时间间隔 秒
      *
-     * ****/
-    public static CountDownTimer countDown( final Context context,long millisInFuture, long countDownInterval,final CountDownListener listener) {
-        CountDownTimer countDownTimer= new CountDownTimer(millisInFuture*1000, countDownInterval*1000) {
+     * @param context           上下文
+     * @param millisInFuture    参数依次为总时长  秒
+     * @param countDownInterval 计时的时间间隔 秒
+     ****/
+    public static CountDownTimer countDown(final Context context, long millisInFuture, long countDownInterval, final CountDownListener listener) {
+        CountDownTimer countDownTimer = new CountDownTimer(millisInFuture * 1000, countDownInterval * 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-               if (listener!=null&&context!=null){
-                   listener.onTick(millisUntilFinished,(context.getString(R.string.res_date)+"("+ millisUntilFinished / 1000 + ")"+context.getString(R.string.second)));
-               }
+                if (listener != null && context != null) {
+                    listener.onTick(millisUntilFinished, (context.getString(R.string.res_date) + "(" + millisUntilFinished / 1000 + ")" + context.getString(R.string.second)));
+                }
             }
 
             @Override
             public void onFinish() {
-                if (listener!=null&&context!=null){
+                if (listener != null && context != null) {
                     listener.onFinish(context.getResources().getString(R.string.wb_get_verification_code));
                 }
             }
@@ -44,20 +44,23 @@ public class TimeUtils {
         countDownTimer.start();
         return countDownTimer;
     }
-  /***
-   * 倒计时接口
-   * **/
-   public interface   CountDownListener{
-       /***
-        * 计时完毕时触发
-        * @param text  计时完毕时 默认文本
-        * */
-        void  onFinish(String text);
-       /***
-        * @param millisUntilFinished 计时过程数
-        * @param   text         计时过程显示文本
-        * **/
-        void  onTick(long millisUntilFinished,String text);
+
+    /***
+     * 倒计时接口
+     **/
+    public interface CountDownListener {
+        /***
+         * 计时完毕时触发
+         *
+         * @param text 计时完毕时 默认文本
+         */
+        void onFinish(String text);
+
+        /***
+         * @param millisUntilFinished 计时过程数
+         * @param text                计时过程显示文本
+         **/
+        void onTick(long millisUntilFinished, String text);
     }
 
     /**
@@ -66,43 +69,24 @@ public class TimeUtils {
      * @param time 秒
      * @return String
      */
-    public static String formetVideoTime(int time) {//
-        String timeStr;
-        String hour, min = "", second;
-
-        if (time >= 3600) {
-            hour = time % 3600 > 9 ? time % 3600 + "" : "0" + (time % 3600);
-        } else {
-            hour = "00";
+    public static String  fromVideoTime(int time) {//
+        StringBuffer stringBuilder = new StringBuffer();
+        if (time >= 3600) {//大于一个小时
+            stringBuilder.append(time % 3600 > 9 ? time % 3600 + "" : "0" + (time % 3600));
         }
         if (time % 3600 < 60) {
-            min = "00";
+            stringBuilder.append("00");
         } else if (time % 3600 / 60 > 0 && time % 3600 / 60 < 10) {
-            min = "0" + time % 3600 / 60;
+            stringBuilder.append("0");
+            stringBuilder.append(time % 3600 / 60);
         } else if (time % 3600 / 60 >= 10) {
-            min = time % 3600 / 60 + "";
+            stringBuilder.append(time % 3600 / 60);
         }
-        second = time % 3600 % 60 > 9 ? time % 3600 % 60 + "" : "0" + time % 3600 % 60;
-        timeStr = hour + ":" + min + ":" + second;
-        return timeStr;
+        stringBuilder.append(time % 3600 % 60 > 9 ? time % 3600 % 60 + "" : "0" + time % 3600 % 60);
+        return stringBuilder.toString();
     }
 
-    /**
-     * 完整时间 精确到秒
-     *
-     * @param date 格式化字符
-     * @return Date
-     **/
-    public static Date getDateTime(String date) {
-        try {
-            SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateTimeInstance();
-            formatter.applyLocalizedPattern(DATE_TYPE_YDS);
-            return formatter.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return new Date();
-        }
-    }
+
 
     /**
      * 将秒转成分秒
@@ -110,7 +94,7 @@ public class TimeUtils {
      * @param time 秒
      * @return String
      */
-    public static String getVoiceRecorderTime(int time) {
+    public static String  fromVoiceRecorderTime(int time) {
         int minute = time / 60;
         int second = time % 60;
         if (minute == 0) {
@@ -126,8 +110,8 @@ public class TimeUtils {
      * @param time 用于展示视频时长的时间
      * @return String
      */
-    public static String getVideoTime(int time) {
-         StringBuilder softReference =new StringBuilder();
+    public static String  fromVideoColon(int time) {
+        StringBuilder softReference = new StringBuilder();
         if (time == 0) {
             return "00:00";
         }
@@ -168,7 +152,7 @@ public class TimeUtils {
      * @param time    转化小数
      * @return String
      */
-    public static String getVideoTime2(Context context, int time) {
+    public static String fromVideoZN(Context context, int time) {
         StringBuilder softReference = new StringBuilder();
         if (time == 0) {
             return context.getString(R.string.unknown);
@@ -213,9 +197,9 @@ public class TimeUtils {
      *
      * @param timeString 需要格式化时间 .使用聊天展示时间
      **/
-    public static String getTalkTime(String timeString) {
+    public static String  fromTalkTime(String timeString) {
         if (timeString == null || timeString.isEmpty()) {
-            return getDataString1(new Date());
+            return formDateString(new Date(), DATE_TYPE_YD);
         }
         SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
         formatter.applyLocalizedPattern(DATE_TYPE_YD);
@@ -238,59 +222,77 @@ public class TimeUtils {
             e.printStackTrace();
             return timeString;
         }
-
     }
+
+
+    /***
+     * 格式化时间
+     *
+     * @param longTime 毫秒
+     */
+    public static String fromDataTime(Long longTime) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Calendar symbols = Calendar.getInstance();
+        symbols.setTimeInMillis(System.currentTimeMillis());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(longTime);
+        if (calendar.get(Calendar.YEAR) != symbols.get(Calendar.YEAR)) {
+            String test = SimpleDateFormat.getDateTimeInstance().format(calendar.getTime());
+            stringBuilder.append(test);
+        } else {
+            if (calendar.get(Calendar.MONTH) != symbols.get(Calendar.MONTH) || calendar.get(Calendar.DAY_OF_MONTH) != symbols.get(Calendar.DAY_OF_MONTH)) {
+                stringBuilder.append((calendar.get(Calendar.MONTH)));
+                stringBuilder.append("-");
+                stringBuilder.append(calendar.get(Calendar.DAY_OF_MONTH));
+                stringBuilder.append(" ");
+                stringBuilder.append(calendar.get(Calendar.HOUR_OF_DAY));
+                stringBuilder.append(":");
+                stringBuilder.append(calendar.get(Calendar.MINUTE));
+            } else {
+                if (calendar.get(Calendar.HOUR_OF_DAY) != symbols.get(Calendar.HOUR_OF_DAY)) {
+                    int hour=symbols.get(Calendar.HOUR_OF_DAY) - calendar.get(Calendar.HOUR_OF_DAY);
+                    if (hour<10){
+                        stringBuilder.append(hour);
+                        stringBuilder.append("小时前");
+                    }else {
+                        stringBuilder.append(calendar.get(Calendar.HOUR_OF_DAY));
+                        stringBuilder.append(":");
+                        stringBuilder.append(calendar.get(Calendar.MINUTE));
+                    }
+
+                } else {
+                    if (calendar.get(Calendar.MINUTE) != symbols.get(Calendar.MINUTE)) {
+                        stringBuilder.append(symbols.get(Calendar.MINUTE) - calendar.get(Calendar.MINUTE));
+                        stringBuilder.append("分钟前");
+                    } else {
+                        int second = symbols.get(Calendar.SECOND) - calendar.get(Calendar.SECOND);
+                        if (second < 10) {
+                            stringBuilder.append("刚刚");
+                        } else {
+                            stringBuilder.append(second);
+                            stringBuilder.append("秒前");
+                        }
+                    }
+                }
+            }
+        }
+        return stringBuilder.toString();
+    }
+
 
     /*****
      * 得到完整的时间字符  英文 到秒
      *
-     * @param date 格式化的时间
-     * @param   pattern 果然是类型
+     * @param date    格式化的时间
+     * @param pattern 类型
      * @return String
      **/
-    public static String getDataTimeString(Date date,String pattern) {
+    public static String formDateString(Date date, String pattern) {
         SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateTimeInstance();
-        formatter.applyLocalizedPattern(DATE_TYPE_YDS);
+        formatter.applyLocalizedPattern(pattern);
         return formatter.format(date);
     }
 
-
-    /*****
-     * 得到完整的时间字符  中文 到秒
-     *
-     * @param date 格式化的时间字符
-     * @return String
-     **/
-    public static String getDataTimeCNString(Date date) {
-        SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateTimeInstance();
-        formatter.applyLocalizedPattern(DATE_TYPE_YDS_2);
-        return formatter.format(date);
-    }
-    /*****
-     * 得到完整的时间字符  中文 到秒
-     *
-     * @param date 格式化的时间字符
-     * @param    pattern 格式化字符
-     * @return String
-     *
-     **/
-    public static String formData(String date,String pattern) {
-        SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateTimeInstance();
-           formatter.applyLocalizedPattern(pattern);
-        try {
-            return getDataString1(formatter.parse(date));
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return  date;
-        }
-    }
-
-
-    private static String getDataString1(Date date) {
-        SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-        formatter.applyLocalizedPattern(DATE_TYPE_YD);
-        return formatter.format(date);
-    }
 
     /*****
      * 将毫秒数转换成时间
@@ -300,30 +302,33 @@ public class TimeUtils {
     public static Date formTimeToDate(long date) {
         SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateTimeInstance();
         formatter.applyLocalizedPattern(DATE_TYPE_YDS);
-        return getDateTime(formatter.format(date));
+        return formTimeToDate(formatter.format(date),DATE_TYPE_YDS);
+
     }
-
-
     /*****
-     * 得到完整的时间字符
+     * 将毫秒数转换成时间
      *
-     * @param date 格式化的时间
+     * @param date 转换毫秒数
      **/
-    public static String getDataBranchString(String date) {
+    public static Date formTimeToDate(long date,String pattern) {
         SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateTimeInstance();
-        formatter.applyLocalizedPattern(DATE_TYPE_YDM);
-        if (date == null || date.isEmpty()) {
-            return formatter.format(new Date());
-        }
-        String timeString;
+        formatter.applyLocalizedPattern(pattern);
+        return formTimeToDate(formatter.format(date),pattern);
+    }
+    /**
+     * 完整时间 精确到秒
+     *
+     * @param date 格式化字符
+     * @return Date
+     **/
+    public static Date formTimeToDate(String date,String pattern) {
         try {
-            Date date2 = formatter.parse(date);
-            timeString = formatter.format(date2);
+            SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getDateTimeInstance();
+            formatter.applyLocalizedPattern(pattern);
+            return formatter.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
-            return formatter.format(new Date());
+            return new Date();
         }
-        return timeString;
     }
-
 }
