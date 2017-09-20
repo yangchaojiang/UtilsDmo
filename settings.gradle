@@ -1,1 +1,1 @@
-include ':app', ':Yutils', ':Richeditorlibrary'
+include ':app', ':Yutils'
