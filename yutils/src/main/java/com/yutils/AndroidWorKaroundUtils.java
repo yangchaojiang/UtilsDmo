@@ -2,6 +2,7 @@ package com.yutils;
 
 import android.app.Activity;
 import android.graphics.Rect;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
@@ -20,7 +21,7 @@ public class AndroidWorKaroundUtils {
     private int usableHeightPrevious;
     private FrameLayout.LayoutParams frameLayoutParams;
 
-    private AndroidWorKaroundUtils(Activity activity) {
+    private AndroidWorKaroundUtils(@NonNull Activity activity) {
         FrameLayout content = (FrameLayout) activity.findViewById(android.R.id.content);
         mChildOfContent = content.getChildAt(0);
         mChildOfContent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

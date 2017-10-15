@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Richeditorlibrary/Richeditorlibrary.iml" filepath="$PROJECT_DIR$/Richeditorlibrary/Richeditorlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/UtilsDmo.iml" filepath="$PROJECT_DIR$/UtilsDmo.iml" />
       <module fileurl="file://$PROJECT_DIR$/yutils/Yutils.iml" filepath="$PROJECT_DIR$/yutils/Yutils.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />

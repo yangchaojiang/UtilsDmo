@@ -2,6 +2,7 @@ package com.yutils;
 
 import android.content.Context;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,18 +26,18 @@ public class TimeUtils {
      * @param millisInFuture    参数依次为总时长  秒
      * @param countDownInterval 计时的时间间隔 秒
      ****/
-    public static CountDownTimer countDown(final Context context, long millisInFuture, long countDownInterval, final CountDownListener listener) {
+    public static CountDownTimer countDown(@NonNull final Context context, long millisInFuture, long countDownInterval, final CountDownListener listener) {
         CountDownTimer countDownTimer = new CountDownTimer(millisInFuture * 1000, countDownInterval * 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                if (listener != null && context != null) {
+                if (listener != null) {
                     listener.onTick(millisUntilFinished, (context.getString(R.string.res_date) + "(" + millisUntilFinished / 1000 + ")" + context.getString(R.string.second)));
                 }
             }
 
             @Override
             public void onFinish() {
-                if (listener != null && context != null) {
+                if (listener != null) {
                     listener.onFinish(context.getResources().getString(R.string.wb_get_verification_code));
                 }
             }

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
+import android.support.annotation.NonNull;
 import android.text.format.Formatter;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -31,7 +32,7 @@ public class YFileUtils {
     /****
      * 文件缓存地址
      **/
-    public static String getDiskCacheDir(Context context) {
+    public static String getDiskCacheDir(@NonNull Context context) {
         return context.getCacheDir().getPath();
     }
 
@@ -41,7 +42,7 @@ public class YFileUtils {
      * @param context 上下文
      * @param type    存放文件的类型  使用 Environment
      **/
-    public static String getDiskFileDir(Context context, String type) {
+    public static String getDiskFileDir(@NonNull Context context,@NonNull String type) {
         String cachePath;
         File file = context.getExternalFilesDir(type);
         if (file != null) {
@@ -86,7 +87,7 @@ public class YFileUtils {
      *
      * @return
      */
-    public static String getSDAvailableSize(Context context) {
+    public static String getSDAvailableSize(@NonNull Context context) {
         return Formatter.formatFileSize(context, getSdAvaliableSize());
     }
 
@@ -95,7 +96,7 @@ public class YFileUtils {
      *
      * @return String
      */
-    public static String getRomTotalSize(Context context) {
+    public static String getRomTotalSize(@NonNull Context context) {
         return Formatter.formatFileSize(context, getRomTotalSize());
     }
 
@@ -104,7 +105,7 @@ public class YFileUtils {
      *
      * @return String
      */
-    public static String getRomAvailableSize(Context context) {
+    public static String getRomAvailableSize(@NonNull Context context) {
         return Formatter.formatFileSize(context, getRomAvailableSize());
     }
 
@@ -252,7 +253,7 @@ public class YFileUtils {
      * @param filePath 要读取的文件路径名
      * @return byte[]
      */
-    public static byte[] readFile(String filePath) {
+    public static byte[] readFile(@NonNull String filePath) {
         try {
             if (isFileExist(filePath)) {
                 FileInputStream fi = new FileInputStream(filePath);
@@ -268,7 +269,7 @@ public class YFileUtils {
      * bitmap 转换输入流
      * @return  InputStream
      ***/
-    public static InputStream bitmapToInput(Bitmap bitmap) {
+    public static InputStream bitmapToInput(@NonNull Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         return new ByteArrayInputStream(baos.toByteArray());
@@ -283,7 +284,7 @@ public class YFileUtils {
      * @return byte[]
      * @throws IOException
      */
-    public static byte[] readInputStream(InputStream in) {
+    public static byte[] readInputStream(@NonNull InputStream in) {
         try {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
 
@@ -294,7 +295,6 @@ public class YFileUtils {
             }
 
             b = os.toByteArray();
-
             in.close();
             os.close();
             return b;
@@ -311,7 +311,7 @@ public class YFileUtils {
      * @param in 网络流
      * @return byte[]
      */
-    public static byte[] readNetWorkInputStream(InputStream in) {
+    public static byte[] readNetWorkInputStream(@NonNull InputStream in) {
         ByteArrayOutputStream os = null;
         try {
             os = new ByteArrayOutputStream();
@@ -349,7 +349,7 @@ public class YFileUtils {
      * @param shouldOverlay 是否覆盖
      * @return boolean
      */
-    public static boolean copyFiles(String sourceFile, String destFile, boolean shouldOverlay) {
+    public static boolean copyFiles(@NonNull String sourceFile,@NonNull String destFile, boolean shouldOverlay) {
         try {
             if (shouldOverlay) {
                 deleteFile(destFile);
@@ -369,7 +369,7 @@ public class YFileUtils {
      * @param filePath 路径名
      * @return boolean
      */
-    public static boolean isFileExist(String filePath) {
+    public static boolean isFileExist(@NonNull String filePath) {
         File file = new File(filePath);
         return file.exists();
     }
@@ -380,7 +380,7 @@ public class YFileUtils {
      * @param filePath  文件资地址 没有目录先创建目录
      * @return boolean
      */
-    public static boolean createFile(String filePath) {
+    public static boolean createFile(@NonNull String filePath) {
         try {
             File file = new File(filePath);
             if (!file.exists()) {
@@ -402,7 +402,7 @@ public class YFileUtils {
      * @param filePath 要删除的文件路径名
      * @return true if this file was deleted, false otherwise
      */
-    public static boolean deleteFile(String filePath) {
+    public static boolean deleteFile(@NonNull String filePath) {
         try {
             File file = new File(filePath);
             if (file.exists()) {
@@ -419,7 +419,7 @@ public class YFileUtils {
      *
      * @param dir  directoryPath目录下的所有文件
      */
-    public static void deleteDirectory(File dir) {
+    public static void deleteDirectory(@NonNull File dir) {
         if (dir == null || dir.listFiles() == null) {
             return;
         }
@@ -438,7 +438,7 @@ public class YFileUtils {
      *
      * @param dir  目录地址
      */
-    public static void createDirectory(String dir) {
+    public static void createDirectory(@NonNull String dir) {
         if (dir == null) {
             return;
         }
@@ -454,7 +454,7 @@ public class YFileUtils {
      * @param is    流转字符串的流
      * @return String
      */
-    public static String inputStream2String(InputStream is) {
+    public static String inputStream2String(@NonNull InputStream is) {
         BufferedReader in = new BufferedReader(new InputStreamReader(is));
         StringBuffer buffer = new StringBuffer();
         String line = "";
@@ -487,7 +487,8 @@ public class YFileUtils {
         } else if (size >= kb) {
             float f = (float) size / kb;
             return format(f > 100 ? "%.00f KB" : "%.2f KB", f);
-        } else
+        } else {
             return format("%d B", size);
+        }
     }
 }

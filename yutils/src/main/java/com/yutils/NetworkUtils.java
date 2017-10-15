@@ -1,11 +1,14 @@
 package com.yutils;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresPermission;
 import android.telephony.TelephonyManager;
 
 import java.lang.reflect.Method;
@@ -16,7 +19,9 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 
 /**
- * Created by yangc on 2017/8/30.
+ *
+ * @author yangc
+ * @date 2017/8/30
  * E-Mail:yangchaojiang@outlook.com
  * Deprecated:
  */
@@ -27,6 +32,7 @@ public class NetworkUtils {
     }
 
     public enum NetworkType {
+        /****/
         NETWORK_WIFI,
         NETWORK_4G,
         NETWORK_3G,
@@ -48,6 +54,7 @@ public class NetworkUtils {
      *
      * @return NetworkInfo
      */
+    @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     private static NetworkInfo getActiveNetworkInfo() {
         return ((ConnectivityManager) YUtils.getApp().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
     }
@@ -58,6 +65,7 @@ public class NetworkUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
+    @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     public static boolean isConnected() {
         NetworkInfo info = getActiveNetworkInfo();
         return info != null && info.isConnected();
@@ -87,6 +95,7 @@ public class NetworkUtils {
      *
      * @param enabled {@code true}: 打开<br>{@code false}: 关闭
      */
+    @RequiresPermission(Manifest.permission.MODIFY_PHONE_STATE)
     public static void setDataEnabled(final boolean enabled) {
         try {
             TelephonyManager tm = (TelephonyManager) YUtils.getApp().getSystemService(Context.TELEPHONY_SERVICE);
@@ -124,11 +133,11 @@ public class NetworkUtils {
 
     /**
      * 打开或关闭wifi
-     * <p>需添加权限 {@code <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>}</p>
      *
      * @param enabled {@code true}: 打开<br>{@code false}: 关闭
      */
-    public static void setWifiEnabled(final boolean enabled) {
+    @RequiresPermission(Manifest.permission.CHANGE_WIFI_STATE)
+    public static void setWifiEnabled(  boolean enabled) {
         @SuppressLint("WifiManagerLeak")
         WifiManager wifiManager = (WifiManager) YUtils.getApp().getSystemService(Context.WIFI_SERVICE);
         if (enabled) {
@@ -148,6 +157,7 @@ public class NetworkUtils {
      *
      * @return {@code true}: 连接<br>{@code false}: 未连接
      */
+    @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     public static boolean isWifiConnected() {
         ConnectivityManager cm = (ConnectivityManager) YUtils.getApp()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -162,6 +172,7 @@ public class NetworkUtils {
      *
      * @return {@code true}: 是<br>{@code false}: 否
      */
+    @RequiresPermission(allOf = {Manifest.permission.ACCESS_WIFI_STATE,Manifest.permission.INTERNET})
     public static boolean isWifiAvailable() {
         return getWifiEnabled() && isNetWorkAvailable();
     }
@@ -195,6 +206,7 @@ public class NetworkUtils {
      * <li>{@link NetworkUtils.NetworkType#NETWORK_NO     } </li>
      * </ul>
      */
+    @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     public static NetworkType getNetworkType() {
         NetworkType netType = NetworkType.NETWORK_NO;
         NetworkInfo info = getActiveNetworkInfo();
@@ -249,49 +261,13 @@ public class NetworkUtils {
         }
         return netType;
     }
-
-    /**
-     * 获取IP地址
-     * <p>需添加权限 {@code <uses-permission android:name="android.permission.INTERNET"/>}</p>
-     *
-     * @param useIPv4 是否用IPv4
-     * @return IP地址
-     */
-    public static String getIPAddress(final boolean useIPv4) {
-        try {
-            for (Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces(); nis.hasMoreElements(); ) {
-                NetworkInterface ni = nis.nextElement();
-                // 防止小米手机返回10.0.2.15
-                if (!ni.isUp()) continue;
-                for (Enumeration<InetAddress> addresses = ni.getInetAddresses(); addresses.hasMoreElements(); ) {
-                    InetAddress inetAddress = addresses.nextElement();
-                    if (!inetAddress.isLoopbackAddress()) {
-                        String hostAddress = inetAddress.getHostAddress();
-                        boolean isIPv4 = hostAddress.indexOf(':') < 0;
-                        if (useIPv4) {
-                            if (isIPv4) return hostAddress;
-                        } else {
-                            if (!isIPv4) {
-                                int index = hostAddress.indexOf('%');
-                                return index < 0 ? hostAddress.toUpperCase() : hostAddress.substring(0, index).toUpperCase();
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     /**
      * 获取域名ip地址
-     * <p>需添加权限 {@code <uses-permission android:name="android.permission.INTERNET"/>}</p>
      *
      * @param domain 域名
      * @return ip地址
      */
+    @RequiresPermission(Manifest.permission.INTERNET)
     public static String getDomainAddress(final String domain) {
         InetAddress inetAddress;
         try {
@@ -308,6 +284,7 @@ public class NetworkUtils {
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>}</p>
      * @return boolean
      */
+    @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     public static boolean isNetWorkAvailable() {
         if (YUtils.getApp() == null) {
             return false;
@@ -331,10 +308,11 @@ public class NetworkUtils {
      * @param context 上下文
      * @return boolean
      ***/
-    public static boolean isWifiConnected(Context context) {
+    public static boolean isWifiConnected(@NonNull Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (null != activeNetwork) { // connected to the internet
+        // connected to the internet
+        if (null != activeNetwork) {
             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
                 return true;
             } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
@@ -350,12 +328,10 @@ public class NetworkUtils {
      * @param context 上下文
      * @return 1:wifi 0:4G 3:no internet connection
      */
-    public static int internetConnType(Context context) {
+    public static int internetConnType(@NonNull Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (null != activeNetwork) { // connected to the internet
-            return activeNetwork.getType();
-        }
-        return -1;
+        // connected to the internet
+        return !(activeNetwork == null) ? activeNetwork.getType() : -1;
     }
 }

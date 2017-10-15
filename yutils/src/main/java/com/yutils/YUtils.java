@@ -21,6 +21,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -49,7 +50,9 @@ import java.util.regex.Pattern;
 import static java.lang.String.*;
 
 /**
- * Created by yangjiang on 2017/1/6.
+ *
+ * @author yangjiang
+ * @date 2017/1/6
  * E-Mail:1007181167@qq.com
  * Description:  帮助类
  */
@@ -70,10 +73,10 @@ public class YUtils {
      * 是否Debug模式
      *
      * @param isDebug true  调试
-     * @param TAG     删除日志的TAG  名称
+     * @param tag     删除日志的TAG  名称
      ***/
-    public static void setDebug(boolean isDebug, String TAG) {
-        YUtils.TAG = TAG;
+    public static void setDebug(boolean isDebug,@NonNull String tag) {
+        YUtils.TAG = tag;
         YUtils.DEBUG = isDebug;
     }
 
@@ -89,12 +92,12 @@ public class YUtils {
     /****
      * 打印日志
      *
-     * @param TAG  自定义日志的TAG  名称
+     * @param tag  自定义日志的TAG  名称
      * @param text 日志内容
      ***/
-    public static void Log(String TAG, String text) {
+    public static void Log(String tag, String text) {
         if (DEBUG) {
-            Log.i(TAG, text);
+            Log.i(tag, text);
         }
     }
 
@@ -103,7 +106,7 @@ public class YUtils {
      *
      * @param text 日志内容
      ***/
-    public static void Log(String text) {
+    public static void Log(@NonNull String text) {
         if (DEBUG) {
             Log.i(TAG, text);
         }
@@ -114,7 +117,7 @@ public class YUtils {
      *
      * @param text 提示内容 字符
      ***/
-    public static void Toast(String text) {
+    public static void Toast(@NonNull String text) {
         if (mToast == null) {
             mToast = Toast.makeText(mApplicationContent.get(), text, android.widget.Toast.LENGTH_SHORT);
         } else {
@@ -129,9 +132,9 @@ public class YUtils {
      * toast 短提示封装
      *
      * @param text    提示内容 字符
-     * @param gravity ttoast 出现位置
+     * @param gravity gravity 出现位置
      ***/
-    public static void Toast(String text, int gravity) {
+    public static void Toast(@NonNull String text, int gravity) {
         if (mToast == null) {
             mToast = Toast.makeText(mApplicationContent.get(), text, android.widget.Toast.LENGTH_SHORT);
         } else {
@@ -147,7 +150,7 @@ public class YUtils {
      *
      * @param resId 提示内容  资源Id
      ***/
-    public static void Toast(int resId) {
+    public static void Toast(@StringRes int resId) {
         if (mToast == null) {
             mToast = Toast.makeText(mApplicationContent.get(), resId, android.widget.Toast.LENGTH_SHORT);
         } else {
@@ -163,7 +166,7 @@ public class YUtils {
      *
      * @param text 提示内容 字符
      ***/
-    public static void ToastLong(String text) {
+    public static void ToastLong(@NonNull String text) {
         if (mToast == null) {
             mToast = Toast.makeText(mApplicationContent.get(), text, Toast.LENGTH_LONG);
         } else {
@@ -179,7 +182,7 @@ public class YUtils {
      *
      * @param resId 提示内容 资源id
      ***/
-    public static void ToastLong(int resId) {
+    public static void ToastLong(@StringRes int resId) {
         if (mToast == null) {
             mToast = Toast.makeText(mApplicationContent.get(), resId, Toast.LENGTH_LONG);
         } else {
@@ -257,7 +260,7 @@ public class YUtils {
      * @param activity 上下文
      * @return int
      */
-    public static int getNavigationBarHeight(Activity activity) {
+    public static int getNavigationBarHeight(@NonNull Activity activity) {
         int result = 0;
         if (isNavigationBarExist2(activity)) {
             int resourceId = mApplicationContent.get().getResources().getIdentifier("navigation_bar_height", "dimen", "android");
@@ -274,7 +277,7 @@ public class YUtils {
      * @param activity 当前对象的上下文
      * @return boolean
      */
-    public static boolean isNavigationBarExist2(Activity activity) {
+    public static boolean isNavigationBarExist2(@NonNull Activity activity) {
         if (Build.VERSION.SDK_INT > 19) {
             WindowManager windowManager = activity.getWindowManager();
             Display d = windowManager.getDefaultDisplay();
@@ -300,7 +303,7 @@ public class YUtils {
      * @param activity 当前对象的上下文
      * @return boolean
      */
-    public static boolean checkDeviceHasNavigationBar(Context activity) {
+    public static boolean checkDeviceHasNavigationBar(@NonNull Context activity) {
 //通过判断设备是否有返回键、菜单键(不是虚拟键,是手机屏幕外的按键)来确定是否有navigation bar
         boolean hasMenuKey ;
         boolean hasBackKey ;
@@ -357,7 +360,7 @@ public class YUtils {
      *
      * @param v 当前显示view
      */
-    public static void closeInputMethod(EditText v) {
+    public static void closeInputMethod(@NonNull EditText v) {
         InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm.isActive()) {
             imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
@@ -386,7 +389,7 @@ public class YUtils {
      * 开启软键盘
      * @param v
      */
-    public static void showKeyboard(View v) {
+    public static void showKeyboard(@NonNull View v) {
         InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(v, InputMethodManager.SHOW_FORCED);
     }
@@ -395,7 +398,7 @@ public class YUtils {
      * 开启软键盘
      * @param et
      */
-    public static void openSoftKeyboard(EditText et) {
+    public static void openSoftKeyboard(@NonNull EditText et) {
         InputMethodManager inputManager = (InputMethodManager) et.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.showSoftInput(et,0);
     }
@@ -405,7 +408,7 @@ public class YUtils {
      *
      * @param text 复制内容
      */
-    public static void copyToClipboard(String text) {
+    public static void copyToClipboard(@NonNull String text) {
         ClipboardManager cbm = (ClipboardManager) mApplicationContent.get().getSystemService(Activity.CLIPBOARD_SERVICE);
         cbm.setPrimaryClip(ClipData.newPlainText(mApplicationContent.get().getPackageName(), text));
     }
@@ -424,7 +427,7 @@ public class YUtils {
      *
      * @return SharedPreferences
      */
-    public static SharedPreferences getSharedPreference(String name) {
+    public static SharedPreferences getSharedPreference(@NonNull String name) {
         return mApplicationContent.get().getSharedPreferences(name, Activity.MODE_PRIVATE);
     }
 
@@ -433,7 +436,7 @@ public class YUtils {
      *
      * @return SharedPreferences
      */
-    public static SharedPreferences getSharedPreference(String name, int mode) {
+    public static SharedPreferences getSharedPreference(@NonNull String name, int mode) {
         return mApplicationContent.get().getSharedPreferences(name, mode);
     }
 
@@ -445,7 +448,7 @@ public class YUtils {
      * @param url
      * @return URL 链接
      */
-    public static boolean isHttp(String url) {
+    public static boolean isHttp(@NonNull String url) {
         if (null == url) return false;
         String regex = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
         Pattern pattern = Pattern.compile(regex);
@@ -460,7 +463,7 @@ public class YUtils {
      * @param packageName 要判断应用的包名
      * @return boolean
      */
-    public static boolean isAppAlive(Context context, String packageName) {
+    public static boolean isAppAlive(@NonNull Context context,@NonNull String packageName) {
         ActivityManager activityManager =
                 (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> processInfos
@@ -564,7 +567,7 @@ public class YUtils {
      *
      * @param a 保留字符
      **/
-    public static String setDoubleZero(String a) {
+    public static String setDoubleZero(@NonNull String a) {
         if (a != null) {
             DecimalFormat df = new DecimalFormat("0.00");
             return df.format(Double.parseDouble(a));
@@ -579,7 +582,7 @@ public class YUtils {
      * @param context 上下文
      * @param path    更新资源的路径
      */
-    public static void sendUpdataSystemAlbum(Context context, String path) {
+    public static void sendUpdataSystemAlbum(@NonNull Context context,@NonNull String path) {
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(path))));
     }
 
@@ -630,7 +633,7 @@ public class YUtils {
      * @param main   根布局
      * @param scroll 需要显示的最下方View
      */
-    public static void addLayoutListener(final View main, final View scroll) {
+    public static void addLayoutListener(@NonNull final View main,@NonNull final View scroll) {
         main.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -662,7 +665,9 @@ public class YUtils {
      * @return Application
      */
     public static Application getApp() {
-        if (mApplicationContent.get() != null) return mApplicationContent.get();
+        if (mApplicationContent.get() != null) {
+            return mApplicationContent.get();
+        }
         throw new NullPointerException("u should init first");
     }
 }

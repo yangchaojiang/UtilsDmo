@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import java.io.File;
 
@@ -25,7 +26,7 @@ public class FileIntentUtil {
      * @param paramPath 地址
      * @return Intent
      */
-    public static Intent getHtmlFileIntent(String paramPath)
+    public static Intent getHtmlFileIntent(@NonNull String paramPath)
 
     {
 
@@ -47,7 +48,7 @@ public class FileIntentUtil {
      * @param paramPath 地址
      * @return Intent
      */
-    public static Intent getImageFileIntent(String paramPath)
+    public static Intent getImageFileIntent(@NonNull String paramPath)
 
     {
 
@@ -71,7 +72,7 @@ public class FileIntentUtil {
      * @param paramPath 地址
      * @return Intent
      */
-    public static Intent getPdfFileIntent(String paramPath) {
+    public static Intent getPdfFileIntent(@NonNull String paramPath) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.addCategory("android.intent.category.DEFAULT");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -88,7 +89,7 @@ public class FileIntentUtil {
      * @param paramBoolean 是否网络连接
      * @return Intent
      */
-    public static Intent getTextFileIntent(String paramString,
+    public static Intent getTextFileIntent(@NonNull String paramString,
                                            boolean paramBoolean)
 
     {
@@ -128,7 +129,7 @@ public class FileIntentUtil {
      * @param paramStringPath 地址
      * @return Intent
      */
-    public static Intent getAudioFileIntent(String paramStringPath)
+    public static Intent getAudioFileIntent (@NonNull String paramStringPath)
 
     {
 
@@ -219,7 +220,7 @@ public class FileIntentUtil {
      * @param path 地址
      * @return Intent
      */
-    public static Intent getWordFileIntent(String path)
+    public static Intent getWordFileIntent(@NonNull String path)
 
     {
 
@@ -243,7 +244,7 @@ public class FileIntentUtil {
      * @param path 地址
      * @return Intent
      */
-    public static Intent getExcelFileIntent(String path)
+    public static Intent getExcelFileIntent(@NonNull String path)
 
     {
 
@@ -267,7 +268,7 @@ public class FileIntentUtil {
      * @param path 地址
      * @return Intent
      */
-    public static Intent getPptFileIntent(String path)
+    public static Intent getPptFileIntent(@NonNull String path)
 
     {
 
@@ -285,7 +286,7 @@ public class FileIntentUtil {
 
     }
 
-    public static boolean openFile(Context context, String path, boolean falg) {
+    public static boolean openFile( @NonNull Context context,@NonNull String path, boolean falg) {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putString("OpenMode", "ReadOnly");

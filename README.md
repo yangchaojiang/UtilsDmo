@@ -2,7 +2,7 @@
  
  ##依赖
  ````
-   compile 'com.ycjiang:Yutils:1.1.4'
+   compile 'com.ycjiang:Yutils:1.2.0'
  ````
 
 JsonManager  json解析  采用 fastjson
