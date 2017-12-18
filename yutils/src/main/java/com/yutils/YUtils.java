@@ -16,17 +16,15 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.v4.content.FileProvider;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
@@ -37,10 +35,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.InputStreamReader;
+import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.UUID;
@@ -58,26 +54,12 @@ import static java.lang.String.*;
  */
 public class YUtils {
     @SuppressLint("StaticFieldLeak")
-    private static String TAG;
-    private static boolean DEBUG = false;
-    private static final ThreadLocal<Application> mApplicationContent = new ThreadLocal<>();
+    private static   final  ThreadLocal<Application> mApplicationContent = new ThreadLocal<>();
     private static Toast mToast = null;
-    private static int gravity = Gravity.BOTTOM;
-
+    private static int gravity =0x00000051;
     public static void initialize(Application app) {
         mApplicationContent.set(app);
 
-    }
-
-    /****
-     * 是否Debug模式
-     *
-     * @param isDebug true  调试
-     * @param tag     删除日志的TAG  名称
-     ***/
-    public static void setDebug(boolean isDebug,@NonNull String tag) {
-        YUtils.TAG = tag;
-        YUtils.DEBUG = isDebug;
     }
 
     /***
@@ -90,35 +72,15 @@ public class YUtils {
     }
 
     /****
-     * 打印日志
-     *
-     * @param tag  自定义日志的TAG  名称
-     * @param text 日志内容
-     ***/
-    public static void Log(String tag, String text) {
-        if (DEBUG) {
-            Log.i(tag, text);
-        }
-    }
-
-    /****
-     * 打印日志
-     *
-     * @param text 日志内容
-     ***/
-    public static void Log(@NonNull String text) {
-        if (DEBUG) {
-            Log.i(TAG, text);
-        }
-    }
-
-    /****
      * toast 短提示封装
      *
      * @param text 提示内容 字符
      ***/
-    public static void Toast(@NonNull String text) {
-        if (mToast == null) {
+    public static void Toast( String text) {
+        if (text==null) {
+            return;
+        }
+            if (mToast == null) {
             mToast = Toast.makeText(mApplicationContent.get(), text, android.widget.Toast.LENGTH_SHORT);
         } else {
             mToast.setText(text);
@@ -134,8 +96,11 @@ public class YUtils {
      * @param text    提示内容 字符
      * @param gravity gravity 出现位置
      ***/
-    public static void Toast(@NonNull String text, int gravity) {
-        if (mToast == null) {
+    public static void Toast( String text, int gravity) {
+        if (text==null) {
+            return;
+        }
+            if (mToast == null) {
             mToast = Toast.makeText(mApplicationContent.get(), text, android.widget.Toast.LENGTH_SHORT);
         } else {
             mToast.setText(text);
@@ -166,7 +131,10 @@ public class YUtils {
      *
      * @param text 提示内容 字符
      ***/
-    public static void ToastLong(@NonNull String text) {
+    public static void ToastLong( String text) {
+        if (text==null){
+            return;
+        }
         if (mToast == null) {
             mToast = Toast.makeText(mApplicationContent.get(), text, Toast.LENGTH_LONG);
         } else {
@@ -278,7 +246,7 @@ public class YUtils {
      * @return boolean
      */
     public static boolean isNavigationBarExist2(@NonNull Activity activity) {
-        if (Build.VERSION.SDK_INT > 19) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
             WindowManager windowManager = activity.getWindowManager();
             Display d = windowManager.getDefaultDisplay();
             DisplayMetrics realDisplayMetrics = new DisplayMetrics();
@@ -315,7 +283,7 @@ public class YUtils {
             return false;
         }
         if (!hasMenuKey && !hasBackKey) {
-// 做任何你需要做的,这个设备有一个导航栏
+        // 做任何你需要做的,这个设备有一个导航栏
             return true;
         } else {
             return false;
@@ -362,6 +330,7 @@ public class YUtils {
      */
     public static void closeInputMethod(@NonNull EditText v) {
         InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        assert imm != null;
         if (imm.isActive()) {
             imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
         }
@@ -391,6 +360,7 @@ public class YUtils {
      */
     public static void showKeyboard(@NonNull View v) {
         InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        assert imm != null;
         imm.showSoftInput(v, InputMethodManager.SHOW_FORCED);
     }
 
@@ -400,6 +370,7 @@ public class YUtils {
      */
     public static void openSoftKeyboard(@NonNull EditText et) {
         InputMethodManager inputManager = (InputMethodManager) et.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        assert inputManager != null;
         inputManager.showSoftInput(et,0);
     }
 
@@ -410,6 +381,7 @@ public class YUtils {
      */
     public static void copyToClipboard(@NonNull String text) {
         ClipboardManager cbm = (ClipboardManager) mApplicationContent.get().getSystemService(Activity.CLIPBOARD_SERVICE);
+        assert cbm != null;
         cbm.setPrimaryClip(ClipData.newPlainText(mApplicationContent.get().getPackageName(), text));
     }
 
@@ -519,24 +491,7 @@ public class YUtils {
     }
 
 
-    /****
-     * Bitmap 放大缩小
-     *
-     * @param b 放大缩小的Bitmap
-     * @param x 放大缩小比例值 宽
-     * @param y 放大缩小比例值 宽
-     ***/
-    public static Bitmap BitmapZoom(Bitmap b, float x, float y) {
-        int w = b.getWidth();
-        int h = b.getHeight();
-        float sx = x / w;
-        float sy = y / h;
-        Matrix matrix = new Matrix();
-        matrix.postScale(sx, sy);
-        Bitmap resizeBmp = Bitmap.createBitmap(b, 0, 0, w,
-                h, matrix, true);
-        return resizeBmp;
-    }
+
 
 
     /***
@@ -657,8 +612,48 @@ public class YUtils {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
-
-
+    public static void install(Context context, File file, boolean force) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+        } else {
+            Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileProvider", file);
+            intent.setDataAndType(uri, "application/vnd.android.package-archive");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+        if (force) {
+            System.exit(0);
+        }
+    }
+    /**
+     * MD5 32位加密方法一 小写
+     *
+     * @param string
+     * @return
+     */
+    public static String get32MD5(@NonNull String string) {
+        char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+        try {
+            byte[] strTemp = string.getBytes();
+            // 使用MD5创建MessageDigest对象
+            MessageDigest mdTemp = MessageDigest.getInstance("MD5");
+            mdTemp.update(strTemp);
+            byte[] md = mdTemp.digest();
+            int j = md.length;
+            char str[] = new char[j * 2];
+            int k = 0;
+            for (int i = 0; i < j; i++) {
+                byte b = md[i];
+                str[k++] = hexDigits[b >> 4 & 0xf];
+                str[k++] = hexDigits[b & 0xf];
+            }
+            return new String(str);
+        } catch (Exception e) {
+            return null;
+        }
+    }
     /**
      * 获取Application
      *

@@ -20,6 +20,7 @@ dependencies {
     /** json 解析 **/
     compile 'com.alibaba:fastjson:1.1.56.android'
     compile 'com.android.support:support-annotations:25.3.1'
+    compile 'com.android.support:support-core-utils:25.3.1'
 }
 /** 以下开始是将Android Library上传到jcenter的相关配置**/
 apply plugin: 'com.github.dcendents.android-maven'
@@ -34,7 +35,7 @@ group = "com.ycjiang"   //没有用户名
 //发布到JCenter上的项目名字，必须填写
 def libName = "yuilts"
 // 版本号，下次更新是只需要更改版本号即可
-version = "1.2.0"
+version = "1.2.3"
 /**  上面配置后上传至jcenter后的编译路径是这样的： compile 'cn.bluemobi.dylan:sqlitelibrary:1.0'  **/
 
 //生成源文件
